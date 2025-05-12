@@ -5,21 +5,21 @@ import Link from "next/link";
 import { Department } from "./lib/definitions";
 
 const page = () => {
-  const [departments, setDepartments] = useState<Department[]>([]);
+  // const [departments, setDepartments] = useState<Department[]>([]);
 
-  useEffect(() => {
-    const getDepartments = async () => {
-      try {
-        const departments = await fetchDepartments();
+  // useEffect(() => {
+  //   const getDepartments = async () => {
+  //     try {
+  //       const departments = await fetchDepartments();
 
-        setDepartments(departments);
-      } catch (error) {
-        console.error("Error fetching departments: ", error);
-      }
-    };
+  //       setDepartments(departments);
+  //     } catch (error) {
+  //       console.error("Error fetching departments: ", error);
+  //     }
+  //   };
 
-    getDepartments();
-  }, []);
+  //   getDepartments();
+  // }, []);
 
   return (
     <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen">
@@ -29,7 +29,7 @@ const page = () => {
           items
         </button>
       </Link>
-      <ul className="space-y-2">
+      {/* <ul className="space-y-2">
         {departments.map((department) => (
           <li
             key={department.departmentId}
@@ -38,7 +38,7 @@ const page = () => {
             {department.displayName}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 };
