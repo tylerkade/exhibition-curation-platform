@@ -10,6 +10,8 @@ const Sidebar = () => {
   const [isDepartmentsOpen, setIsDepartmentsOpen] = useState(false);
   const [departments, setDepartments] = useState<Department[]>([]);
 
+
+  // Will probably remove departments from sidebar
   useEffect(() => {
     const getDepartments = async () => {
       try {
@@ -35,6 +37,14 @@ const Sidebar = () => {
           <div className="mt-4">
             <Link href="/" className="text-white hover:text-gray-300">
               Home
+            </Link>
+          </div>
+          <div className="mt-4">
+            <Link
+              href="/collections"
+              className="text-white hover:text-gray-300"
+            >
+              Collections
             </Link>
           </div>
           <div className="mt-4">
