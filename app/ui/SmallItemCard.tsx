@@ -20,11 +20,7 @@ export default function SmallItemCard({ art, view }: SmallItemCardProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <h3 className="font-medium text-sm">{art.title}</h3>
             <h3 className="text-sm">
-              {art.constituents &&
-              art.constituents.length > 0 &&
-              art.constituents[0].name
-                ? art.constituents[0].name
-                : "Unknown"}
+              {art.artistDisplayName ? art.artistDisplayName : "Unknown"}
             </h3>
             <h3 className="hidden md:block text-sm">
               {art.department && art.department.length > 0
@@ -48,24 +44,24 @@ export default function SmallItemCard({ art, view }: SmallItemCardProps) {
           art.APIsource.slice(0, 1) + art.objectID
         }`}
       >
-        <h3 className="font-medium text-sm mb-1 text-center">{art.title}</h3>
+        <h3 className="font-medium text-sm mb-2 text-center line-clamp-2">
+          {art.title}
+        </h3>
         {art.primaryImageSmall || art.primaryImage ? (
-          <Image
-            src={art.primaryImageSmall || art.primaryImage}
-            alt={art.title || "Artwork"}
-            width={300}
-            height={300}
-            className="object-cover justify-self-center"
-            priority
-            style={{
-              height: "200px",
-              width: "auto",
-            }}
-          />
+          <div className="relative w-full h-[200px] mb-2">
+            <Image
+              src={art.primaryImageSmall || art.primaryImage}
+              alt={art.title || "Artwork"}
+              fill
+              className="object-contain rounded"
+              sizes="(max-width: 768px) 100vw, 200px"
+              priority
+            />
+          </div>
         ) : (
-          <p className="text-xs text-gray-500 text-center align-middle">
+          <div className="h-[200px] flex items-center justify-center text-xs text-gray-500 text-center border rounded mb-2">
             No image available
-          </p>
+          </div>
         )}
       </Link>
     </div>

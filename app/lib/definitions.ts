@@ -268,6 +268,10 @@ export type Tags = {
 export type ArtworkPageProps = {
   artwork_id: string;
   apiSource: string;
+  dashboard?: boolean;
+  exhibit_id?: number;
+  onRemove?: (objectID: number) => void;
+  exhibits?: { exhibit_id: number; name: string; artworks: string[] }[] | null;
 };
 
 export type ViewToggleProps = {

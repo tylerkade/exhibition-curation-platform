@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/scratchpad.sql
+/output.txt
 
 # next.js
 /.next/

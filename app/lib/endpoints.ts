@@ -1,7 +1,99 @@
 "use server";
+import { sql } from "@vercel/postgres";
 import { mapARTICToMETData } from "../utils/ARTICFunctions";
 import { getRandomAmount } from "../utils/randomSelection";
-import { APIObject, ARTICResponse } from "./definitions";
+import { APIObject, ARTICResponse, User } from "./definitions";
+
+export async function fetchUsers() {
+  try {
+    const data = await sql`SELECT * FROM users`;
+    return data.rows;
+  } catch (error) {
+    console.error("error fetching users", error);
+    throw new Error("error fetching users");
+  }
+}
+
+export async function fetchUserByUsername(username: string | undefined) {
+  try {
+    const data = await sql<User>`SELECT * FROM users 
+    WHERE username = ${username}`;
+    return data.rows[0];
+  } catch (error) {
+    console.error("error fetching user", error);
+    throw new Error("error fetching user");
+  }
+}
+
+export async function fetchUserExhibits(username: string) {
+  try {
+    const data = await sql`
+      SELECT e.id AS exhibit_id, e.name AS exhibit_name, ea.artwork_id 
+      FROM users u
+      JOIN exhibits e ON u.user_id = e.user_id
+      LEFT JOIN exhibit_artworks ea ON e.id = ea.exhibit_id
+      WHERE u.username = ${username}
+      ORDER BY e.id;
+    `;
+
+    const exhibits: {
+      exhibit_id: number;
+      name: string;
+      artworks: string[];
+    }[] = [];
+
+    for (const row of data.rows) {
+      const { exhibit_id, exhibit_name, artwork_id } = row;
+
+      let exhibit = exhibits.find((e) => e.name === exhibit_name);
+
+      if (!exhibit) {
+        exhibit = { exhibit_id: exhibit_id, name: exhibit_name, artworks: [] };
+        exhibits.push(exhibit);
+      }
+      if (artwork_id) {
+        exhibit.artworks.push(artwork_id);
+      }
+    }
+
+    return exhibits;
+  } catch (error) {
+    console.error("error fetching users exhibits", error);
+    throw new Error("error fetching users exhibits");
+  }
+}
+
+export async function addArtworkToExhibit(
+  exhibit_id: number,
+  artwork_id: string
+) {
+  try {
+    const data = await sql`
+    INSERT INTO exhibit_artworks
+    VALUES (${exhibit_id}, ${artwork_id})
+    ON CONFLICT DO NOTHING;
+    `;
+    return data.rowCount;
+  } catch (error) {
+    console.error("error adding artwork to exhibit", error);
+    throw new Error("error adding artwork to exhibit");
+  }
+}
+
+export async function removeArtworkFromExhibit(
+  exhibit_id: number,
+  artwork_id: string
+) {
+  try {
+    await sql`
+    DELETE FROM exhibit_artworks
+    WHERE exhibit_id = ${exhibit_id} AND artwork_id = ${artwork_id};
+    `;
+  } catch (error) {
+    console.error("error removing artwork from exhibit", error);
+    throw new Error("error removing artwork from exhibit");
+  }
+}
 
 export async function fetchCollectionMainPage(amount: number) {
   const METResponse = await fetch(
@@ -104,7 +196,7 @@ export async function fetchARTICArtworks(page: number = 1, limit: number = 12) {
   return { ARTICArtworks, pagination };
 }
 
-export async function fetchARTICArtwork(id: number) {
+export async function fetchARTICArtworkById(id: number) {
   const response = await fetch(`https://api.artic.edu/api/v1/artworks/${id}`);
   if (!response.ok) {
     throw new Error(`Error fetching artwork data`);

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 
 const FormSchema = z.object({
@@ -35,7 +35,15 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
-    await signIn("credentials", formData);
+    const res = await signIn("credentials", {
+      redirect: false,
+      username: formData.get("username"),
+    });
+
+    if (res?.error) {
+      return "Invalid credentials.";
+    }
+    redirect("/dashboard");
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -47,5 +55,8 @@ export async function authenticate(
     }
     throw error;
   }
-  redirect("/dashboard");
+}
+
+export async function UserSignOut() {
+  await signOut({ redirectTo: "/", redirect: true });
 }

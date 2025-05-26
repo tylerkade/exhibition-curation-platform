@@ -6,6 +6,7 @@ export function buildARTICImageUrl(iiif_url: string, image_id: string): string {
 
 export function mapARTICToMETData(data: ARTICArtwork, config: ARTICConfig) {
   const imageUrl = buildARTICImageUrl(config?.iiif_url || "", data.image_id);
+  const tags = data.term_titles.map(term => ({ term }));
 
   return {
     objectID: data.id,
@@ -26,6 +27,7 @@ export function mapARTICToMETData(data: ARTICArtwork, config: ARTICConfig) {
     primaryImageSmall: imageUrl,
     classification: data.classification_title,
     creditLine: data.credit_line,
+    tags: tags,
     APIsource: "ARTIC",
   };
 }

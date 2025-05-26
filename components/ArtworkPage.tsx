@@ -1,24 +1,32 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { fetchARTICArtwork, fetchMETArtworkById } from "@/app/lib/endpoints";
+import {
+  addArtworkToExhibit,
+  fetchARTICArtworkById,
+  fetchMETArtworkById,
+  removeArtworkFromExhibit,
+} from "@/app/lib/endpoints";
 import ItemCard from "@/app/ui/ItemCard";
 import { APIObject, ArtworkPageProps } from "@/app/lib/definitions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
+import DashboardShowcase from "@/app/ui/DashboardShowcase";
 
 export default function ArtworkPage({
   artwork_id,
   apiSource,
+  dashboard,
+  exhibit_id,
+  onRemove,
+  exhibits,
 }: ArtworkPageProps) {
   const [artwork, setArtwork] = useState<APIObject | null>(null);
   const [loading, setLoading] = useState(true);
-  const [inFavourites, setInFavourites] = useState(false);
-
-  const handleClick = () => {
-    setInFavourites((prev) => !prev);
-  };
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isFavourited, setIsFavourited] = useState(false);
+  const [addingToExhibit, setAddingToExhibit] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,55 +39,142 @@ export default function ArtworkPage({
             break;
           }
           case "A": {
-            object = await fetchARTICArtwork(Number(artwork_id));
+            object = await fetchARTICArtworkById(Number(artwork_id));
             break;
           }
           default:
             return notFound();
         }
 
-        if (!object) {
-          return notFound();
-        }
+        if (!object) return notFound();
 
         setArtwork(object);
+
+        if (exhibits) {
+          const fullArtworkId = apiSource + object.objectID;
+          const isInAnyExhibit = exhibits.some((exhibit) => {
+            return exhibit.artworks.includes(fullArtworkId);
+          });
+          setIsFavourited(isInAnyExhibit);
+        }
       } catch (error) {
         console.error("Error fetching artworks:", error);
-        notFound();
+        setArtwork(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [artwork_id, apiSource]);
+  }, [artwork_id, apiSource, exhibits]);
+
+  const handleToggleFavourite = async (selectedExhibitId?: number) => {
+    if (!exhibits) {
+      window.alert(
+        "You must be logged in to add this artwork to a custom exhibition."
+      );
+      return;
+    }
+    if (!artwork) return;
+    const fullArtworkId = apiSource + artwork.objectID;
+
+    if (isFavourited) {
+      const targetExhibitId =
+        exhibit_id ||
+        exhibits?.find((ex) => ex.artworks.includes(fullArtworkId))?.exhibit_id;
+
+      if (!targetExhibitId) {
+        console.warn("Error: This artwork isn't in any of your exhibits.");
+        return;
+      }
+
+      try {
+        await removeArtworkFromExhibit(targetExhibitId, fullArtworkId);
+        setIsFavourited(false);
+        setShowDropdown(false);
+        if (onRemove) {
+          onRemove(artwork.objectID);
+        }
+      } catch (error) {
+        console.error("Failed to remove artwork from favourites", error);
+      }
+    } else if (selectedExhibitId) {
+      try {
+        setAddingToExhibit(selectedExhibitId);
+        await addArtworkToExhibit(selectedExhibitId, fullArtworkId);
+        setIsFavourited(true);
+        setShowDropdown(false);
+      } catch (err) {
+        console.error("Failed to add artwork to exhibit:", err);
+      } finally {
+        setAddingToExhibit(null);
+      }
+    } else {
+      setShowDropdown((prev) => !prev);
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen">
-      <div className="flex justify-between items-center">
-        <Link
-          href={`/collections/${
-            apiSource === "M" ? "MET" : apiSource === "A" ? "ARTIC" : ""
-          }/page/1`}
-        >
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Back
-          </button>
-        </Link>
-        <button
-          onClick={handleClick}
-          className={`text-white font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700`}
-        >
-          {!inFavourites ? (
-            <StarOutline height={24} />
+    <>
+      {!dashboard ? (
+        <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen">
+          <div className="flex justify-between items-center">
+            <Link
+              href={`/collections/${
+                apiSource === "M" ? "MET" : apiSource === "A" ? "ARTIC" : ""
+              }/page/1`}
+            >
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Back
+              </button>
+            </Link>
+            <div>
+              <button
+                onClick={() => handleToggleFavourite()}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                {isFavourited ? (
+                  <StarSolid height={24} />
+                ) : (
+                  <StarOutline height={24} />
+                )}
+              </button>
+
+              {!isFavourited && showDropdown && exhibits && (
+                <div className="absolute z-10 bg-blue-500 rounded shadow-lg mt-1 w-48">
+                  {exhibits.map((exhibit) => (
+                    <button
+                      key={exhibit.exhibit_id}
+                      onClick={() => handleToggleFavourite(exhibit.exhibit_id)}
+                      className="block w-full text-left px-4 py-2 hover:bg-blue-700 text-sm"
+                      disabled={addingToExhibit === exhibit.exhibit_id}
+                    >
+                      {addingToExhibit === exhibit.exhibit_id
+                        ? "Adding..."
+                        : exhibit.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          {!artwork ? notFound() : <ItemCard object={artwork} />}
+        </div>
+      ) : (
+        <>
+          {!artwork ? (
+            notFound()
           ) : (
-            <StarSolid height={24} />
+            <DashboardShowcase
+              art={artwork}
+              exhibit_id={exhibit_id}
+              onRemove={onRemove}
+            />
           )}
-        </button>
-      </div>
-      {!artwork ? notFound() : <ItemCard object={artwork} />}
-    </div>
+        </>
+      )}
+    </>
   );
 }

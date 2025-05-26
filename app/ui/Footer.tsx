@@ -14,6 +14,7 @@ const Footer = () => {
               height={229}
               alt="Easy Exhibitions Logo"
               className="mx-auto h-15 w-auto"
+              priority
             />
           </Link>
         </div>

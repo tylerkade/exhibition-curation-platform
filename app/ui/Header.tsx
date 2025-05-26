@@ -5,7 +5,7 @@ import React from "react";
 const Header = () => {
   return (
     <div className="flex justify-center">
-      <Link href={"/"} className="flex justify-center items-center pt-4">
+      <Link href={"/"} className="flex justify-center items-center">
         <Image
           src="/Logo.png"
           width={475}
