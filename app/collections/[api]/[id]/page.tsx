@@ -3,13 +3,12 @@ import ArtworkPage from "@/components/ArtworkPage";
 import { auth } from "@/auth";
 import { fetchUserExhibits } from "@/app/lib/endpoints";
 
-type PageProps = {
-  params: { id: string };
-};
-
-export default async function Page({ params }: PageProps) {
-  const { id } = await params; // 'await has no effect here' - (VSC), but it prevents the async access
-  // error (think this is a quirk of Next.js + Typescript)
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const session = await auth();
 
   const apiSource = id.slice(0, 1);
