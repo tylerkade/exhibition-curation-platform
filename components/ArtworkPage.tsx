@@ -114,6 +114,10 @@ export default function ArtworkPage({
     }
   };
 
+  const handleClick = () => {
+    setLoading(true);
+  };
+
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -126,14 +130,17 @@ export default function ArtworkPage({
                 apiSource === "M" ? "MET" : apiSource === "A" ? "ARTIC" : ""
               }/page/1`}
             >
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button
+                onClick={handleClick}
+                className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
                 Back
               </button>
             </Link>
-            <div>
+            <div className="relative inline-block">
               <button
                 onClick={() => handleToggleFavourite()}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 {isFavourited ? (
                   <StarSolid height={24} />
@@ -143,12 +150,12 @@ export default function ArtworkPage({
               </button>
 
               {!isFavourited && showDropdown && exhibits && (
-                <div className="absolute z-10 bg-blue-500 rounded shadow-lg mt-1 w-48">
+                <div className="absolute right-0 top-full mt-2 z-10 bg-blue-500 rounded shadow-lg w-48">
                   {exhibits.map((exhibit) => (
                     <button
                       key={exhibit.exhibit_id}
                       onClick={() => handleToggleFavourite(exhibit.exhibit_id)}
-                      className="block w-full text-left px-4 py-2 hover:bg-blue-700 text-sm"
+                      className="cursor-pointer block w-full text-left px-4 py-2 hover:bg-blue-700 text-sm"
                       disabled={addingToExhibit === exhibit.exhibit_id}
                     >
                       {addingToExhibit === exhibit.exhibit_id

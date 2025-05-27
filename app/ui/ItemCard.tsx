@@ -3,7 +3,6 @@ import React from "react";
 import { APIObject } from "../lib/definitions";
 
 const ItemCard = ({ object }: { object: APIObject }) => {
-  console.log(object.medium);
   return (
     <div>
       <div className="justify-self-center">

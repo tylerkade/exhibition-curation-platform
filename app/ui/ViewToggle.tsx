@@ -7,7 +7,7 @@ export default function ViewToggle({ view, setView }: ViewToggleProps) {
     <div className="flex justify-end">
       <button
         onClick={() => setView(view === "grid" ? "list" : "grid")}
-        className="flex items-center gap-2 px-3 py-1 border rounded-md text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+        className="cursor-pointer flex items-center gap-2 px-3 py-1 border rounded-md text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
       >
         {view === "grid" ? (
           <span className="flex items-center gap-2">

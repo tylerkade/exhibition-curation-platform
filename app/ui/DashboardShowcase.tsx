@@ -56,7 +56,7 @@ export default function DashboardShowcase({
 
       <button
         onClick={handleRemove}
-        className="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 text-sm rounded mt-auto"
+        className="cursor-pointer bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 text-sm rounded mt-auto"
       >
         Remove from favourites
       </button>

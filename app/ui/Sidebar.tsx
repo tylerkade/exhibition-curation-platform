@@ -53,7 +53,7 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
               <form action={UserSignOut}>
                 <button
                   type="submit"
-                  className="text-white hover:text-gray-300 cursor-pointer"
+                  className="cursor-pointer text-white hover:text-gray-300"
                 >
                   Sign out
                 </button>
@@ -70,7 +70,7 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
       <div className={`flex-1 pt-4 pl-4 ${isOpen ? "ml-64" : "ml-0"}`}>
         <div className="ml-auto">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <CrossIcon /> : <ListIcon />}

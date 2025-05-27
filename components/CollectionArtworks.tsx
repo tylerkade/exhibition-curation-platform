@@ -39,7 +39,7 @@ export default function CollectionArtworks({
     <div className="p-4 max-w-6xl mx-auto space-y-6 min-h-screen">
       <h1 className="text-xl font-semibold">{api} Collection</h1>
       <Link href="/collections">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Return to collections
         </button>
       </Link>

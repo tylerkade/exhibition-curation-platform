@@ -48,7 +48,7 @@ export default function ExhibitSection({
         {isMore && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="border rounded p-4 hover:bg-gray-700 text-center text-sm"
+            className="cursor-pointer border rounded p-4 hover:bg-gray-700 text-center text-sm"
           >
             {expanded ? "Show less" : "Show more"}
           </button>
