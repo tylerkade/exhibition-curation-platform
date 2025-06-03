@@ -9,6 +9,7 @@ export type PaginationProps = {
   api: string;
   view?: "grid" | "list";
   pageLimit?: number;
+  filters?: Filters;
 };
 
 export type APIObject = {
@@ -70,19 +71,24 @@ export type APIObject = {
   isTimelineWork?: boolean;
   GalleryNumber?: string;
   APIsource: string;
+  ARTICWidth?: number;
+  ARTICHeight?: number;
+  ARTICDescription?: string;
 };
 
 export type ARTICResponse = {
-  pagination: {
-    total: number;
-    limit: number;
-    offset: number;
-    total_pages: number;
-    current_page: number;
-    next_url: string;
-  };
+  pagination: ARTICPagination;
   data: ARTICArtwork[];
   config: ARTICConfig;
+};
+
+export type ARTICPagination = {
+  total: number;
+  limit: number;
+  offset: number;
+  total_pages: number;
+  current_page: number;
+  next_url: string | null;
 };
 
 export type ARTICConfig = {
@@ -289,4 +295,29 @@ export type User = {
 export type UserExhibit = {
   name: string;
   artworks: string[];
+};
+
+export type Filters = {
+  q?: string;
+  departmentId?: string;
+  searchField?: string;
+  hasImages?: string;
+  dateBegin?: string;
+  dateEnd?: string;
+};
+
+export type ARTICSearchResponse = {
+  _score: number;
+  id: number;
+  api_model: string;
+  api_link: string;
+  is_boosted: boolean;
+  title: string;
+  thumbnail: {
+    lqip: string;
+    width: number;
+    height: number;
+    alt_text: string;
+  };
+  timestamp: string;
 };

@@ -39,7 +39,7 @@ const Login = () => {
           <button
             type="submit"
             aria-disabled={isPending}
-            className="flex h-[36px] w-full items-center justify-center rounded-lg py-2 text-fitBlue shadow focus:outline-none bg-blue-500 hover:bg-blue-700"
+            className="cursor-pointer flex h-[36px] w-full items-center justify-center rounded-lg py-2 text-fitBlue shadow focus:outline-none bg-blue-500 hover:bg-blue-700"
           >
             Log in
           </button>

@@ -26,7 +26,7 @@ const Error = ({
                 <p className="mb-8 text-lg text-red-600">{error}</p>
                 <Link
                   href={nav}
-                  className="inline-block rounded-lg border border-white px-8 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-primary"
+                  className="inline-block rounded-lg border border-white px-8 py-3 text-center text-base font-semibold text-white transition hover:bg-white hover:text-black hover:text-primary"
                 >
                   {buttonMessage ? `${buttonMessage}` : "Go To Home"}
                 </Link>

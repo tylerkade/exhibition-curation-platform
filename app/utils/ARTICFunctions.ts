@@ -1,12 +1,22 @@
 import { ARTICArtwork, ARTICConfig } from "../lib/definitions";
 
-export function buildARTICImageUrl(iiif_url: string, image_id: string): string {
-  return image_id ? `${iiif_url}/${image_id}/full/600,/0/default.jpg` : "";
+export function buildARTICImageUrl(
+  iiif_url: string,
+  image_id: string,
+  width: number
+): string {
+  return image_id ? `${iiif_url}/${image_id}/full/${width},/0/default.jpg` : "";
 }
 
 export function mapARTICToMETData(data: ARTICArtwork, config: ARTICConfig) {
-  const imageUrl = buildARTICImageUrl(config?.iiif_url || "", data.image_id);
-  const tags = data.term_titles.map(term => ({ term }));
+  const width = Math.min(data.thumbnail?.width || 0, 843);
+  const height = data.thumbnail?.height;
+  const imageUrl = buildARTICImageUrl(
+    config?.iiif_url || "",
+    data.image_id,
+    width || 600
+  );
+  const tags = data.term_titles.map((term) => ({ term }));
 
   return {
     objectID: data.id,
@@ -28,6 +38,22 @@ export function mapARTICToMETData(data: ARTICArtwork, config: ARTICConfig) {
     classification: data.classification_title,
     creditLine: data.credit_line,
     tags: tags,
+    ARTICWidth: width,
+    ARTICHeight: height,
     APIsource: "ARTIC",
+    ARTICDescription: data.description || "",
   };
+}
+
+export function formatQ(q: string) {
+  const splitQ = q
+    .split(",")
+    .map((i: string) => i.trim())
+    .filter((i) => i.length > 0);
+  if (splitQ.length === 0) return '""';
+
+  const formatQ = splitQ
+    .map((i: string) => (i.includes(" ") ? `"${i}"` : i))
+    .join("+");
+  return formatQ;
 }

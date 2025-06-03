@@ -1,8 +1,17 @@
 "use server";
 import { sql } from "@vercel/postgres";
-import { mapARTICToMETData } from "../utils/ARTICFunctions";
+import { formatQ, mapARTICToMETData } from "../utils/ARTICFunctions";
 import { getRandomAmount } from "../utils/randomSelection";
-import { APIObject, ARTICResponse, User } from "./definitions";
+import {
+  APIObject,
+  ARTICArtwork,
+  ARTICPagination,
+  ARTICSearchResponse,
+  Filters,
+  User,
+} from "./definitions";
+
+// Database
 
 export async function fetchUsers() {
   try {
@@ -95,6 +104,8 @@ export async function removeArtworkFromExhibit(
   }
 }
 
+// API calls
+
 export async function fetchCollectionMainPage(amount: number) {
   const METResponse = await fetch(
     `https://collectionapi.metmuseum.org/public/collection/v1/objects`
@@ -121,7 +132,9 @@ export async function fetchCollectionMainPage(amount: number) {
 
 // let cachedMETIDs: number[] | null = null;
 
-export async function fetchMETIDs(): Promise<{
+// MET API calls
+
+export async function fetchMETIDs(filters: Filters): Promise<{
   // limit = 1000
   total: number;
   objectIDs: number[];
@@ -135,14 +148,52 @@ export async function fetchMETIDs(): Promise<{
   //     objectIDs: cachedMETIDs.slice(0, limit),
   //   };
   // }
-  const response = await fetch(
-    `https://collectionapi.metmuseum.org/public/collection/v1/objects`
-  );
-  if (!response.ok) {
-    throw new Error(`Error fetching artwork IDs`);
+
+  const formattedQ = formatQ(filters.q ?? "");
+
+  const query = new URLSearchParams({
+    ...(filters.departmentId && { departmentId: filters.departmentId }),
+    ...(filters.searchField === "title" && { title: "true" }),
+    ...(filters.searchField === "tags" && { tags: "true" }),
+    ...(filters.searchField === "artistOrCulture" && {
+      artistOrCulture: "true",
+    }),
+    ...(filters.hasImages !== "" && { hasImages: filters.hasImages }),
+    ...(filters.dateBegin && { dateBegin: filters.dateBegin.toString() }),
+    ...(filters.dateEnd && { dateEnd: filters.dateEnd.toString() }),
+    q: formattedQ.trim() === "" ? '""' : formattedQ,
+  });
+
+  let response: Response;
+  const newQuery = query.toString();
+
+  if (
+    filters.q ||
+    filters.departmentId ||
+    filters.searchField !== "all" ||
+    filters.hasImages ||
+    filters.dateBegin ||
+    filters.dateEnd
+  ) {
+    response = await fetch(
+      `https://collectionapi.metmuseum.org/public/collection/v1/search?${newQuery}`
+    );
+    if (!response.ok) {
+      throw new Error(`Error fetching searched artwork IDs`);
+    }
+  } else {
+    response = await fetch(
+      `https://collectionapi.metmuseum.org/public/collection/v1/objects`
+    );
+    if (!response.ok) {
+      throw new Error(`Error fetching artwork IDs`);
+    }
   }
 
   const { total, objectIDs } = await response.json();
+  if (!objectIDs || total === 0) {
+    return { total: 0, objectIDs: [] };
+  }
 
   const sortedObjectIDs = objectIDs.sort((a: number, b: number) => a - b);
   // const limited = sortedObjectIDs.slice(0, limit)
@@ -169,6 +220,12 @@ export async function fetchMETArtworkById(
     if (!response.ok) {
       throw new Error(`Error fetching artwork with ID: ${artwork_id}`);
     }
+    // Fetching IDs is supposed to get you valid IDs that exists (i.e. has an artwork), and
+    // normally if an ID does not exist and you try to fetch it, it returns
+    // {"message": "Not a valid object"}, However, there are some IDs that do exist, but
+    // return {"message": "ObjectID not found"} despite being "valid IDs" - therefore 'total'
+    // will always be off without validating each and every artwork before displaying it
+    // (which isn't feasible)
     const artwork = await response.json();
     artwork.APIsource = "MET";
 
@@ -176,49 +233,6 @@ export async function fetchMETArtworkById(
   } catch (error) {
     console.error(`Error fetching artwork with ID: ${artwork_id}`, error);
     throw new Error(`Error fetching artwork with ID: ${artwork_id}`);
-  }
-}
-
-export async function fetchARTICArtworks(page: number = 1, limit: number = 12) {
-  const response = await fetch(
-    `https://api.artic.edu/api/v1/artworks?page=${page}&limit=${limit}`
-  );
-  if (!response.ok) {
-    throw new Error(`Error fetching artwork IDs`);
-  }
-  const APIResponse: ARTICResponse = await response.json();
-
-  const { pagination, data, config } = APIResponse;
-
-  const ARTICArtworks = data.map((artwork) => {
-    return mapARTICToMETData(artwork, config);
-  });
-  return { ARTICArtworks, pagination };
-}
-
-export async function fetchARTICArtworkById(id: number) {
-  const response = await fetch(`https://api.artic.edu/api/v1/artworks/${id}`);
-  if (!response.ok) {
-    throw new Error(`Error fetching artwork data`);
-  }
-
-  const { data, config } = await response.json();
-  return mapARTICToMETData(data, config);
-}
-
-export async function fetchArtworksBySearch(search_term: string) {
-  try {
-    const response = await fetch(
-      `https://collectionapi.metmuseum.org/public/collection/v1/search?${search_term}`
-    );
-    if (!response.ok) {
-      throw new Error(`Error fetching artwork`);
-    }
-    const { total, objectIDs } = await response.json();
-    return { total, objectIDs };
-  } catch (error) {
-    console.error(`Error fetching artwork`, error);
-    throw new Error(`Error fetching artwork`);
   }
 }
 
@@ -237,4 +251,80 @@ export async function fetchDepartments() {
     console.error(`Error fetching departments`, error);
     throw new Error(`Error fetching departments`);
   }
+}
+
+// ARTIC API calls
+export async function fetchARTICArtworks(
+  page: number = 1,
+  limit: number = 10,
+  filters: Filters = {}
+) {
+  const formattedQ = formatQ(filters.q ?? "");
+  const query = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+    q: formattedQ,
+  });
+
+  // ARTIC doesn't have an in-depth search endpoint
+
+  let response: Response;
+  let artworkIDs: number[] = [];
+  let pagination: ARTICPagination;
+
+  if (filters.q) {
+    console.log(`https://api.artic.edu/api/v1/artworks/search?${query.toString()}`)
+    response = await fetch(
+      `https://api.artic.edu/api/v1/artworks/search?${query.toString()}`
+    );
+    if (!response.ok) throw new Error(`Error searching ARTIC artworks`);
+
+    const { data, pagination: pag } = await response.json();
+    artworkIDs = data.map((art: ARTICSearchResponse) => art.id);
+    pagination = pag;
+  } else {
+    response = await fetch(
+      `https://api.artic.edu/api/v1/artworks?${query.toString()}`
+    );
+    if (!response.ok) throw new Error(`Error fetching ARTIC artworks`);
+
+    const { data, pagination: pag, config } = await response.json();
+
+    const ARTICArtworks = data.map((artwork: ARTICArtwork) =>
+      mapARTICToMETData(artwork, config)
+    );
+
+    return {
+      total: pag.total,
+      ARTICArtworks,
+      pagination: pag,
+    };
+  }
+
+  const fullArtworks = await Promise.all(
+    artworkIDs.map(async (id) => {
+      const res = await fetch(`https://api.artic.edu/api/v1/artworks/${id}`);
+      if (!res.ok) return null;
+      const { data, config } = await res.json();
+      return mapARTICToMETData(data, config);
+    })
+  );
+
+  const validArtworks = fullArtworks.filter(Boolean) as APIObject[];
+
+  return {
+    total: pagination.total,
+    ARTICArtworks: validArtworks,
+    pagination,
+  };
+}
+
+export async function fetchARTICArtworkById(id: number) {
+  const response = await fetch(`https://api.artic.edu/api/v1/artworks/${id}`);
+  if (!response.ok) {
+    throw new Error(`Error fetching artwork data`);
+  }
+
+  const { data, config } = await response.json();
+  return mapARTICToMETData(data, config);
 }

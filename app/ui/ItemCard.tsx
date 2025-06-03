@@ -1,20 +1,39 @@
 import Image from "next/image";
 import React from "react";
+import DOMPurify from "dompurify";
 import { APIObject } from "../lib/definitions";
 
 const ItemCard = ({ object }: { object: APIObject }) => {
+  const setWidth = 512;
+
+  const imageWidth =
+    object.ARTICWidth && object.ARTICWidth < setWidth
+      ? object.ARTICWidth
+      : setWidth;
+
+  const imageHeight =
+    object.ARTICHeight && object.ARTICHeight < setWidth
+      ? object.ARTICHeight
+      : Math.round((imageWidth * 4) / 3);
+
+  const cleanDescription = DOMPurify.sanitize(object.ARTICDescription || "", {
+    ALLOWED_TAGS: ["p", "em", "strong", "ul", "li", "br"],
+    ALLOWED_ATTR: [],
+  });
+
   return (
     <div>
       <div className="justify-self-center">
         <Image
           src={object.primaryImage || "/placeholder.png"}
           alt={`image of ${object.objectName}`}
-          width="0"
-          height="0"
+          width={imageWidth}
+          height={imageHeight}
           sizes="100vw"
-          className="w-[512px] h-auto"
+          className="h-auto"
+          style={{ width: `${imageWidth}px` }}
           priority
-        ></Image>
+        />
       </div>
       <div>
         <div className="p-4 space-y-2">
@@ -47,6 +66,14 @@ const ItemCard = ({ object }: { object: APIObject }) => {
             <p className="text-gray-400 text-sm">{object.reign}</p>
           )}
           <p className="text-gray-400 text-sm">{object.dimensions}</p>
+          {object.ARTICDescription && (
+            <div
+              className="text-m"
+              dangerouslySetInnerHTML={{
+                __html: cleanDescription,
+              }}
+            ></div>
+          )}
           <div className="flex justify-between items-start gap-4">
             <div className="flex flex-wrap gap-2 text-xs text-gray-300 mt-2 max-w-[70%]">
               {object.tags && object.tags.length > 0 ? (

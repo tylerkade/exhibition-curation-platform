@@ -3,17 +3,20 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Pagination } from "@/app/ui/Pagination";
 import SmallItemCard from "@/app/ui/SmallItemCard";
-import { APIObject } from "@/app/lib/definitions";
+import { APIObject, Department, Filters } from "@/app/lib/definitions";
 import ViewToggle from "@/app/ui/ViewToggle";
-// import CollectionFilter from "@/app/ui/CollectionFilter";
+import CollectionFilter from "@/app/ui/CollectionFilter";
 import Link from "next/link";
 // import PageLimit from "@/app/ui/PageLimit";
+import { sanitiseSearchField } from "@/app/utils/validateSearchFields";
 
 interface CollectionArtworksProps {
   artworks: APIObject[];
   pageNumber: number;
   totalPages: number;
   api: string;
+  fetchedDepartments: Department[];
+  totalResults: number;
 }
 
 export default function CollectionArtworks({
@@ -21,6 +24,8 @@ export default function CollectionArtworks({
   pageNumber,
   totalPages,
   api,
+  fetchedDepartments,
+  totalResults,
 }: CollectionArtworksProps) {
   const searchParams = useSearchParams();
   const viewParam = searchParams.get("view");
@@ -28,12 +33,23 @@ export default function CollectionArtworks({
     viewParam === "list" ? "list" : "grid"
   );
 
+  const [filters, setFilters] = useState<Filters>({
+    departmentId: searchParams.get("departmentId") || "",
+    searchField: sanitiseSearchField(searchParams.get("searchField")),
+    hasImages: searchParams.get("hasImages") || "",
+    dateBegin: searchParams.get("dateBegin") || "",
+    dateEnd: searchParams.get("dateEnd") || "",
+    q: searchParams.get("q") || "",
+  });
+
   useEffect(() => {
     const current = new URLSearchParams(window.location.search);
     current.set("view", view);
     const newUrl = `${window.location.pathname}?${current.toString()}`;
     window.history.replaceState({}, "", newUrl);
   }, [view]);
+
+  // console.log(filters.dateBegin, filters.dateEnd)
 
   return (
     <div className="p-4 max-w-6xl mx-auto space-y-6 min-h-screen">
@@ -50,8 +66,17 @@ export default function CollectionArtworks({
         with pagination on ARTIC api*/}
       </div>
       <div className="text-white flex items-start justify-center">
-        {/* <CollectionFilter /> */}
+        <CollectionFilter
+          filters={filters}
+          setFilters={setFilters}
+          fetchedDepartments={fetchedDepartments}
+          api={api}
+        />
       </div>
+      <div>{totalResults} Results</div>
+      {artworks.length === 0 && (
+        <div className="text-center text-white">No artworks found.</div>
+      )}
       <div
         className={
           view === "grid"
@@ -59,7 +84,7 @@ export default function CollectionArtworks({
             : "pt-4"
         }
       >
-        {view === "list" ? (
+        {view === "list" && artworks.length !== 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4">
             <h3>Title</h3>
             <h3>Author</h3>
@@ -78,6 +103,7 @@ export default function CollectionArtworks({
         totalPages={totalPages}
         api={api}
         view={view}
+        filters={filters}
       />
     </div>
   );

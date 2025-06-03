@@ -118,7 +118,7 @@ export default function ArtworkPage({
     setLoading(true);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="text-center">Loading...</p>;
 
   return (
     <>
