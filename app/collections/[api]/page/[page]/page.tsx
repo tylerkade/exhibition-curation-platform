@@ -3,6 +3,7 @@ import { MetPaginationValues } from "@/app/utils/METPaginationValues";
 import CollectionArtworks from "@/components/CollectionArtworks";
 import { sanitiseSearchField } from "@/app/utils/validateSearchFields";
 import Error from "@/app/ui/Error";
+import sanitizeHtml from "sanitize-html";
 
 async function Page(props: {
   params: Promise<{ api: string; page: string }>;
@@ -43,8 +44,6 @@ async function Page(props: {
     q: q || "",
   };
 
-  console.log(filters.q);
-
   try {
     let artworks = [];
     let totalPages = 1;
@@ -57,7 +56,14 @@ async function Page(props: {
           pageLimit,
           filters
         );
-        artworks = result.artworks;
+        artworks = result.artworks.map((artwork) => ({
+          ...artwork,
+          title: sanitizeHtml(artwork.title || "", {
+            allowedTags: ["i", "em", "strong"],
+            allowedAttributes: {},
+          }),
+        }));
+
         totalPages = result.totalPages;
         totalResults = result.total;
         break;

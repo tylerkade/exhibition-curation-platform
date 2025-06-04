@@ -259,6 +259,9 @@ export async function fetchARTICArtworks(
   limit: number = 10,
   filters: Filters = {}
 ) {
+  const hasQueryFilter = Boolean(filters.q && filters.q.trim() !== "");
+  limit = hasQueryFilter ? 10 : 12;
+
   const formattedQ = formatQ(filters.q ?? "");
   const query = new URLSearchParams({
     page: page.toString(),
@@ -272,8 +275,7 @@ export async function fetchARTICArtworks(
   let artworkIDs: number[] = [];
   let pagination: ARTICPagination;
 
-  if (filters.q) {
-    console.log(`https://api.artic.edu/api/v1/artworks/search?${query.toString()}`)
+  if (hasQueryFilter) {
     response = await fetch(
       `https://api.artic.edu/api/v1/artworks/search?${query.toString()}`
     );

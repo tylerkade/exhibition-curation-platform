@@ -16,7 +16,7 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
   return (
     <div className="flex">
       <div
-        className={`bg-gray-800 text-white fixed h-screen transition-all duration-300 z-10 ${
+        className={`bg-gray-800 text-white fixed h-screen transition-all duration-300 z-100 ${
           isOpen ? "w-64" : "w-0 overflow-hidden"
         }`}
       >
@@ -67,7 +67,9 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
           </div>
         </div>
       </div>
-      <div className={`flex-1 pt-4 pl-4 ${isOpen ? "ml-64" : "ml-0"}`}>
+      <div
+        className={`flex-1 pt-4 pl-4 bg-gray-800 ${isOpen ? "ml-64" : "ml-0"}`}
+      >
         <div className="ml-auto">
           <button
             className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "

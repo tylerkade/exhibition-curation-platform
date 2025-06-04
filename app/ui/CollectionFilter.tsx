@@ -267,6 +267,9 @@ const CollectionFilter = ({
             )}
             <p className="col-span-2 text-center italic text-gray-100 opacity-50">
               Note: Some artwork data provided by the API may be incorrect
+              {api === "ARTIC" && (
+                <p>The ARTIC api is limited to 100 pages when searching</p>
+              )}
             </p>
             <div className="col-span-2 grid grid-cols-2">
               <div className="justify-self-start">

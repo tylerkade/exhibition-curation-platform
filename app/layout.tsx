@@ -31,10 +31,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col`}
       >
-        <Sidebar userDetails={session?.user} />
-        <Header />
+        <div className="">
+          <Sidebar userDetails={session?.user} />
+          <Header />
+        </div>
         <main className="flex-auto">{children}</main>
         <Footer />
       </body>

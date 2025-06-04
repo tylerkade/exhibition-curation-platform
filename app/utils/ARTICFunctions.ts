@@ -9,8 +9,19 @@ export function buildARTICImageUrl(
 }
 
 export function mapARTICToMETData(data: ARTICArtwork, config: ARTICConfig) {
-  const width = Math.min(data.thumbnail?.width || 0, 843);
-  const height = data.thumbnail?.height;
+  const originalWidth = data.thumbnail?.width || 0;
+  const originalHeight = data.thumbnail?.height || 0;
+  const maxWidth = 843;
+
+  let width = originalWidth;
+  let height = originalHeight;
+
+  if (originalWidth > maxWidth && originalHeight) {
+    const aspectRatio = originalHeight / originalWidth;
+    width = maxWidth;
+    height = Math.round(maxWidth * aspectRatio);
+  }
+
   const imageUrl = buildARTICImageUrl(
     config?.iiif_url || "",
     data.image_id,

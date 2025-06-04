@@ -6,9 +6,9 @@ import SmallItemCard from "@/app/ui/SmallItemCard";
 import { APIObject, Department, Filters } from "@/app/lib/definitions";
 import ViewToggle from "@/app/ui/ViewToggle";
 import CollectionFilter from "@/app/ui/CollectionFilter";
-import Link from "next/link";
 // import PageLimit from "@/app/ui/PageLimit";
 import { sanitiseSearchField } from "@/app/utils/validateSearchFields";
+import { CollectionsButton } from "@/app/ui/CollectionsButton";
 
 interface CollectionArtworksProps {
   artworks: APIObject[];
@@ -49,16 +49,19 @@ export default function CollectionArtworks({
     window.history.replaceState({}, "", newUrl);
   }, [view]);
 
-  // console.log(filters.dateBegin, filters.dateEnd)
-
   return (
     <div className="p-4 max-w-6xl mx-auto space-y-6 min-h-screen">
-      <h1 className="text-xl font-semibold">{api} Collection</h1>
-      <Link href="/collections">
-        <button className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Return to collections
-        </button>
-      </Link>
+      <div className="flex justify-between gap-3">
+        <h1 className="text-xl font-semibold">
+          {api === "MET"
+            ? "The Metropolitan Museum of Art"
+            : api === "ARTIC"
+            ? "The Art Institute of Chicago"
+            : api}{" "}
+          Collection
+        </h1>
+        <CollectionsButton btnMsg="Return to collections" nav="/collections" />
+      </div>
       <div className="justify-end flex gap-3">
         <ViewToggle view={view} setView={setView} />
         {/* {api === "ARTIC" ? <PageLimit /> : <></>} */}

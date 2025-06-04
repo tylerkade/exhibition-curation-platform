@@ -1,44 +1,40 @@
 import Image from "next/image";
 import React from "react";
-import DOMPurify from "dompurify";
 import { APIObject } from "../lib/definitions";
+import { sanitiseHTML } from "../utils/sanitiseHTML";
 
 const ItemCard = ({ object }: { object: APIObject }) => {
   const setWidth = 512;
 
-  const imageWidth =
-    object.ARTICWidth && object.ARTICWidth < setWidth
-      ? object.ARTICWidth
-      : setWidth;
-
-  const imageHeight =
-    object.ARTICHeight && object.ARTICHeight < setWidth
-      ? object.ARTICHeight
-      : Math.round((imageWidth * 4) / 3);
-
-  const cleanDescription = DOMPurify.sanitize(object.ARTICDescription || "", {
-    ALLOWED_TAGS: ["p", "em", "strong", "ul", "li", "br"],
-    ALLOWED_ATTR: [],
-  });
+  const cleanTitle = sanitiseHTML(object.title);
+  const cleanDescription = sanitiseHTML(object.ARTICDescription);
 
   return (
     <div>
-      <div className="justify-self-center">
+      <div className="justify-self-center bg-gray-200 p-2 rounded">
         <Image
           src={object.primaryImage || "/placeholder.png"}
           alt={`image of ${object.objectName}`}
-          width={imageWidth}
-          height={imageHeight}
-          sizes="100vw"
-          className="h-auto"
-          style={{ width: `${imageWidth}px` }}
+          width={object.ARTICWidth ?? setWidth}
+          height={object.ARTICHeight ?? Math.round((setWidth * 3) / 4)}
+          style={{
+            height: "auto",
+            width: "100%",
+            maxWidth: `${object.ARTICWidth}px`,
+          }}
+          className="h-auto rounded"
           priority
         />
       </div>
       <div>
         <div className="p-4 space-y-2">
           <h2 className="text-xl font-semibold text-white line-clamp-2">
-            {object.title}
+            <p
+              className="text-m"
+              dangerouslySetInnerHTML={{
+                __html: cleanTitle,
+              }}
+            ></p>
           </h2>
           {object.artistDisplayName ? (
             <p className="text-gray-400 text-sm">

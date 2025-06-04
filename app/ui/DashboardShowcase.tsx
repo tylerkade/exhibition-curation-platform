@@ -33,9 +33,12 @@ export default function DashboardShowcase({
           art.APIsource.slice(0, 1) + art.objectID
         }`}
       >
-        <h3 className="font-medium text-sm mb-2 text-center line-clamp-2">
-          {art.title}
-        </h3>
+        <h3
+          className="font-medium text-sm mb-2 text-center line-clamp-2"
+          dangerouslySetInnerHTML={{
+            __html: art.title,
+          }}
+        ></h3>
         {art.primaryImageSmall || art.primaryImage ? (
           <div className="relative w-full h-[200px] mb-2">
             <Image

@@ -321,3 +321,8 @@ export type ARTICSearchResponse = {
   };
   timestamp: string;
 };
+
+export type UserDetails = {
+  name: string;
+  username: string;
+};
