@@ -27,7 +27,10 @@ export default function DashboardShowcase({
   };
 
   return (
-    <div className="border p-2 rounded flex flex-col justify-between h-full min-h-[320px] max-w-[200px] mx-auto">
+    <div
+      className="border border-gray-600 p-2 rounded bg-gray-700 shadow-lg 
+      shadow-black/30 transition-transform duration-200 transform hover:scale-101 h-full flex flex-col justify-between"
+    >
       <Link
         href={`/collections/${art.APIsource}/${
           art.APIsource.slice(0, 1) + art.objectID
@@ -59,7 +62,8 @@ export default function DashboardShowcase({
 
       <button
         onClick={handleRemove}
-        className="cursor-pointer bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 text-sm rounded mt-auto"
+        className="cursor-pointer bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 text-sm rounded mt-auto block 
+        w-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Remove from favourites
       </button>

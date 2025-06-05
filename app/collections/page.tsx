@@ -2,7 +2,7 @@ import React from "react";
 import { fetchCollectionMainPage } from "../lib/endpoints";
 import CollectionPage from "@/components/CollectionPage";
 
-const artworkDisplayCount = 10;
+const artworkDisplayCount = 10; // Max 12
 
 export default async function Page() {
   const { ARTICArtworks, randomMETArtworks } = await fetchCollectionMainPage(

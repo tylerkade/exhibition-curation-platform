@@ -1,6 +1,5 @@
 "use client";
-
-import Link from "next/link";
+// import Link from "next/link";
 import React from "react";
 import { useActionState } from "react";
 import { authenticate } from "@/app/lib/serverActions";
@@ -24,7 +23,7 @@ const Login = () => {
         </div>
         <form action={formAction} className="space-y-4 p-5">
           <div>
-            <label htmlFor="username" className="flex gap-1 text-fitBlue">
+            <label htmlFor="username" className="flex gap-1 text-white">
               Username:
             </label>
             <input
@@ -32,14 +31,16 @@ const Login = () => {
               id="username"
               name="username"
               required
-              className="mt-1 h-8 w-full rounded-md border p-3 focus:outline-none"
+              className="mt-1 h-8 w-full rounded-md border p-3 focus:outline-none text-white bg-gray-700 
+              placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your username"
             />
           </div>
           <button
             type="submit"
             aria-disabled={isPending}
-            className="cursor-pointer flex h-[36px] w-full items-center justify-center rounded-lg py-2 text-fitBlue shadow focus:outline-none bg-blue-500 hover:bg-blue-700"
+            className="cursor-pointer flex h-[36px] w-full items-center justify-center rounded-lg py-2 shadow focus:outline-none 
+            bg-blue-500 hover:bg-blue-700 text-white"
           >
             Log in
           </button>
@@ -57,16 +58,24 @@ const Login = () => {
           </div>
         </form>
         <div className="pb-10">
-          <p className="text-center text-sm">
-            Default username:
-            <strong className="text-fitViolet">ThisIsAUsername</strong>
-          </p>
-          <p className="text-center text-sm text-gray-600">
+          <div className="text-center text-sm text-white">
+            Default usernames:
+            <div className="mt-2 space-y-1">
+              <p>
+                <strong className="text-gray-400">ThisIsAUsername</strong>
+              </p>
+              <p>
+                <strong className="text-gray-400">EmptyUser</strong>
+              </p>
+            </div>
+          </div>
+
+          {/* <p className="text-center text-sm text-gray-600">
             Don{`'`}t have an account?
-            <Link href="/signup" className="text-fitBlue hover:underline">
+            <Link href="/signup" className="text-blue-500 hover:underline">
               <span className="font-bold">Sign up today!</span>
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </>

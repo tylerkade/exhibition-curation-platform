@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import ArtworkPage from "@/components/ArtworkPage";
 import Link from "next/link";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 export default function ExhibitSection({
   name,
@@ -19,11 +20,15 @@ export default function ExhibitSection({
   const isMore = savedArtworks.length > 5;
 
   return (
-    <div className="space-y-2 rounded-md p-2">
-      <h2 className="text-lg font-semibold">{name}</h2>
+    <div className="space-y-2 rounded-md p-2 bg-gray-700">
+      <h2 className="text-lg font-semibold">
+        {name[0].toUpperCase() + name.slice(1)}
+      </h2>
       {(!visibleArtworks || visibleArtworks.length === 0) && (
-        <div className="text-center text-xl text-blue-700">
-          <Link href={`/collections`}>Browse collections</Link>
+        <div className="h-32 flex items-center justify-center text-xl text-blue-600 underline">
+          <Link href={`/collections`} className="hover:text-blue-500">
+            Browse collections
+          </Link>
         </div>
       )}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-1">
@@ -48,9 +53,19 @@ export default function ExhibitSection({
         {isMore && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="cursor-pointer border rounded p-4 hover:bg-gray-700 text-center text-sm"
+            className="border border-gray-600 cursor-pointer rounded w-full h-[40px] flex items-center justify-center 
+             hover:bg-gray-700 shadow-lg text-sm text-white shadow-black/30 transition-transform duration-200 
+             transform hover:scale-101"
           >
-            {expanded ? "Show less" : "Show more"}
+            <span className="inline-flex items-center gap-1">
+              {expanded ? "Show less" : "Show more"}
+              <ChevronDownIcon
+                width={24}
+                className={`transition-transform ${
+                  expanded ? "rotate-180" : ""
+                }`}
+              />
+            </span>
           </button>
         )}
       </div>

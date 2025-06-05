@@ -33,7 +33,7 @@ export default async function Page() {
           />
         </div>
         <div className="relative z-10 max-w-3xl">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white">
             Discover. Curate. Exhibit.
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-6">

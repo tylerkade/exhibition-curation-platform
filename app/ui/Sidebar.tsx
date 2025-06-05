@@ -20,57 +20,82 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
           isOpen ? "w-64" : "w-0 overflow-hidden"
         }`}
       >
-        <div className="flex flex-col items-center">
-          <div className="mt-4">
-            <Link href="/" className="text-white hover:text-gray-300">
-              Home
-            </Link>
-          </div>
-          <div className="mt-4">
-            <Link
-              href="/collections"
-              className="text-white hover:text-gray-300"
-            >
-              Collections
-            </Link>
-          </div>
-          <div className="mt-4">
-            {userDetails ? (
-              <Link
-                href="/dashboard"
-                className="text-white hover:text-gray-300"
-              >
-                {username}
-              </Link>
-            ) : (
-              <Link href="/login" className="text-white hover:text-gray-300">
-                Login
-              </Link>
-            )}
-          </div>
-          {userDetails && (
+        <div className="flex flex-col items-center justify-between h-full py-4">
+          <div className="flex flex-col items-center gap-4">
             <div className="mt-4">
-              <form action={UserSignOut}>
-                <button
-                  type="submit"
-                  className="cursor-pointer text-white hover:text-gray-300"
-                >
-                  Sign out
-                </button>
-              </form>
+              <Link
+                href="/"
+                className="text-white hover:text-gray-300"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                Home
+              </Link>
             </div>
-          )}
-          <div className="mt-4">
-            <Link href="/about" className="text-white hover:text-gray-300">
-              About
-            </Link>
+            <div className="mt-4">
+              <Link
+                href="/collections"
+                className="text-white hover:text-gray-300"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                Collections
+              </Link>
+            </div>
+            <div className="mt-4">
+              {userDetails ? (
+                <Link
+                  href="/dashboard"
+                  className="text-white hover:text-gray-300"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  {username}
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="text-white hover:text-gray-300"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  Login
+                </Link>
+              )}
+            </div>
+            {userDetails && (
+              <div className="mt-4">
+                <form action={UserSignOut}>
+                  <button
+                    type="submit"
+                    className="cursor-pointer text-white hover:text-gray-300"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    Sign out
+                  </button>
+                </form>
+              </div>
+            )}
+            <div className="mt-4">
+              <Link
+                href="/about"
+                className="text-white hover:text-gray-300"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                About
+              </Link>
+            </div>
+          </div>
+          <div className="text-xs text-gray-400 mt-4">
+            <p className="line-clamp-1">© 2025 Easy Exhibitions.</p>
+            <p className="line-clamp-1">All Rights Reserved.</p>
           </div>
         </div>
       </div>
       <div
         className={`flex-1 pt-4 pl-4 bg-gray-800 ${isOpen ? "ml-64" : "ml-0"}`}
       >
-        <div className="ml-auto">
+        <div
+          className={`${
+            isOpen ? "fixed top-4 left-65 z-100" : "fixed top-4 left-4 z-100"
+          }`}
+        >
           <button
             className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
             onClick={() => setIsOpen(!isOpen)}

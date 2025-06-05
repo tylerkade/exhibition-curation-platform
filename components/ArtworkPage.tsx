@@ -134,7 +134,7 @@ export default function ArtworkPage({
                 onClick={handleClick}
                 className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Back
+                Return to collection
               </button>
             </Link>
             <div className="relative inline-block">

@@ -14,9 +14,9 @@ export default async function Page() {
   const exhibits = await fetchUserExhibits(userData.username);
 
   return (
-    <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen">
+    <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen bg-gray-900">
       <h1 className="pl-2 text-xl font-black">Hello {userData.name}</h1>
-      <h2 className="pl-2 text-lg font-bold border-b border-gray-800">
+      <h2 className="pl-2 text-lg font-bold border-b border-gray-700">
         Your Exhibits
       </h2>
 

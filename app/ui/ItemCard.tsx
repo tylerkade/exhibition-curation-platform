@@ -87,7 +87,9 @@ const ItemCard = ({ object }: { object: APIObject }) => {
             </div>
             <div className="text-right">
               <p className="text-gray-400 text-sm">Department</p>
-              <p className="text-sm text-white">{object.department}</p>
+              <p className="text-sm text-white">
+                {object.department || "Unknown Department"}
+              </p>
             </div>
           </div>
         </div>

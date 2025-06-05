@@ -4,7 +4,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <div className="relative justify-center pb-15 bg-gray-800">
+    <div className="relative justify-center py-10 bg-gray-800">
       <div className="flex justify-center items-center">
         <Link href={"/"}>
           <Image
