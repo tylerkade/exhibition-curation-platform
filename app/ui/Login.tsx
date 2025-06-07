@@ -22,40 +22,51 @@ const Login = () => {
           </div>
         </div>
         <form action={formAction} className="space-y-4 p-5">
-          <div>
-            <label htmlFor="username" className="flex gap-1 text-white">
-              Username:
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              required
-              className="mt-1 h-8 w-full rounded-md border p-3 focus:outline-none text-white bg-gray-700 
+          <fieldset
+            className="space-y-4"
+            aria-describedby={errorMessage ? "form-error" : undefined}
+          >
+            <legend className="text-white text-lg font-semibold">
+              Login details
+            </legend>
+            <div>
+              <label htmlFor="username" className="flex gap-1 text-white">
+                Username:
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                required
+                className="mt-1 h-8 w-full rounded-md border p-3 focus:outline-none text-white bg-gray-700 
               placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your username"
-            />
-          </div>
-          <button
-            type="submit"
-            aria-disabled={isPending}
-            className="cursor-pointer flex h-[36px] w-full items-center justify-center rounded-lg py-2 shadow focus:outline-none 
-            bg-blue-500 hover:bg-blue-700 text-white"
-          >
-            Log in
-          </button>
-          <div
-            className="flex items-end space-x-1"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {errorMessage && (
-              <>
-                <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-                <p className="text-sm text-red-500">{errorMessage}</p>
-              </>
-            )}
-          </div>
+                placeholder="Enter your username"
+                aria-describedby={errorMessage ? "username-error" : undefined}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="cursor-pointer flex h-[36px] w-full items-center justify-center rounded-lg py-2 shadow focus:outline-none focus:ring-2 focus:ring-white
+            bg-blue-600 hover:bg-blue-800 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Log in
+            </button>
+            <div
+              className="flex items-end space-x-1"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {errorMessage && (
+                <>
+                  <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                  <p className="text-sm text-red-500" id="username-error">
+                    {errorMessage}
+                  </p>
+                </>
+              )}
+            </div>
+          </fieldset>
         </form>
         <div className="pb-10">
           <div className="text-center text-sm text-white">

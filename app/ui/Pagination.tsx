@@ -9,9 +9,9 @@ export function Pagination({
   totalPages,
   api,
   view,
+  // pageLimit = 12,
   filters,
-}: // pageLimit = 12,
-PaginationProps) {
+}: PaginationProps) {
   const prevPage = currentPage - 1;
   const nextPage = currentPage + 1;
   const router = useRouter();
@@ -71,13 +71,20 @@ PaginationProps) {
   if (totalPages === 0) return <></>;
   else
     return (
-      <nav className="flex flex-col items-center gap-4 py-6">
+      <nav
+        className="flex flex-col items-center gap-4 py-6"
+        aria-label="Pagination navigation"
+      >
         <ul className="inline-flex -space-x-px text-sm">
           {prevPage >= 1 && (
             <li>
               <Link
                 href={buildURL(prevPage)}
-                className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-3 h-8 ms-0 leading-tight 
+                text-black bg-white border border-e-0 border-gray-300 rounded-s-lg 
+                hover:bg-gray-200 hover:text-black dark:bg-gray-800 dark:border-gray-700 
+                dark:text-white dark:hover:bg-gray-700 dark:hover:text-white 
+                focus:outline-none focus:ring focus:ring-blue-400"
               >
                 Previous
               </Link>
@@ -97,8 +104,12 @@ PaginationProps) {
                   className={`flex items-center justify-center px-3 h-8 leading-tight border 
                   ${
                     page === currentPage
-                      ? "text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:bg-gray-700 dark:text-white"
-                      : "text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      ? `text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 
+                      hover:text-blue-700 dark:bg-gray-700 dark:text-white`
+                      : `text-black bg-white border-gray-300 hover:bg-gray-200 
+                      hover:text-black dark:bg-gray-800 dark:border-gray-700 dark:text-white 
+                      dark:hover:bg-gray-700 dark:hover:text-white
+                      focus:outline-none focus:ring focus:ring-blue-400`
                   }`}
                 >
                   {page}
@@ -111,7 +122,11 @@ PaginationProps) {
             <li>
               <Link
                 href={buildURL(nextPage)}
-                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-3 h-8 leading-tight 
+                  text-black bg-white border border-gray-300 rounded-e-lg 
+                  hover:bg-gray-200 hover:text-black dark:bg-gray-800 
+                  dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 
+                  dark:hover:text-white focus:outline-none focus:ring focus:ring-blue-400"
               >
                 Next
               </Link>
@@ -132,11 +147,13 @@ PaginationProps) {
               placeholder="Page number"
               value={inputPage}
               onChange={(e) => setInputPage(e.target.value)}
-              className="w-30 px-2 py-1 text-sm border rounded-md dark:bg-gray-800 dark:text-white dark:border-gray-600"
+              className={`w-30 px-2 py-1 text-sm border rounded-md dark:bg-gray-800 
+                dark:text-white dark:border-gray-600`}
             />
             <button
               type="submit"
-              className="cursor-pointer text-sm px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className={`cursor-pointer text-sm px-3 py-1.5 bg-blue-600 text-white 
+                rounded-md hover:bg-blue-700`}
             >
               Go
             </button>

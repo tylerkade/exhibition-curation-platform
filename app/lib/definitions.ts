@@ -326,3 +326,8 @@ export type UserDetails = {
   name: string;
   username: string;
 };
+
+export type SmallItemCardProps = {
+  art: APIObject;
+  view?: "grid" | "list";
+};

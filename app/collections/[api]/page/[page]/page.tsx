@@ -101,7 +101,7 @@ async function Page(props: {
       }
 
     return (
-      <div>
+      <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen bg-gray-900">
         <CollectionArtworks
           artworks={artworks}
           pageNumber={pageNumber}

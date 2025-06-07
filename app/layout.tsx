@@ -33,9 +33,17 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col`}
       >
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only absolute top-0 left-0 bg-blue-600 text-white p-2 z-50"
+        >
+          Skip to main content
+        </a>
         <Sidebar userDetails={session?.user} />
         <Header />
-        <main className="flex-auto">{children}</main>
+        <main className="flex-auto" id="main">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

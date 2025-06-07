@@ -31,38 +31,43 @@ export default function DashboardShowcase({
       className="border border-gray-600 p-2 rounded bg-gray-700 shadow-lg 
       shadow-black/30 transition-transform duration-200 transform hover:scale-101 h-full flex flex-col justify-between"
     >
-      <Link
-        href={`/collections/${art.APIsource}/${
-          art.APIsource.slice(0, 1) + art.objectID
-        }`}
-      >
-        <h3
-          className="font-medium text-sm mb-2 text-center line-clamp-2"
-          dangerouslySetInnerHTML={{
-            __html: art.title,
-          }}
-        ></h3>
-        {art.primaryImageSmall || art.primaryImage ? (
-          <div className="relative w-full h-[200px] mb-2">
-            <Image
-              src={art.primaryImageSmall || art.primaryImage}
-              alt={art.title || "Artwork"}
-              fill
-              className="object-contain rounded"
-              sizes="(max-width: 768px) 100vw, 200px"
-              priority
-            />
-          </div>
-        ) : (
-          <div className="h-[200px] flex items-center justify-center text-xs text-gray-500 text-center border rounded mb-2">
-            No image available
-          </div>
-        )}
-      </Link>
-
+      <div aria-live="polite" aria-relevant="additions removals">
+        <Link
+          href={`/collections/${art.APIsource}/${
+            art.APIsource.slice(0, 1) + art.objectID
+          }`}
+        >
+          <h3
+            className="font-medium text-sm mb-2 text-center line-clamp-2"
+            dangerouslySetInnerHTML={{
+              __html: art.title,
+            }}
+          ></h3>
+          {art.primaryImageSmall || art.primaryImage ? (
+            <div className="relative w-full h-[200px] mb-2">
+              <Image
+                src={art.primaryImageSmall || art.primaryImage}
+                alt={
+                  art.title
+                    ? `Artwork titled ${art.title}`
+                    : "No image available for this artwork"
+                }
+                fill
+                className="object-contain rounded"
+                sizes="(max-width: 768px) 100vw, 200px"
+                priority
+              />
+            </div>
+          ) : (
+            <div className="h-[200px] flex items-center justify-center text-xs text-gray-500 text-center border rounded mb-2">
+              No image available
+            </div>
+          )}
+        </Link>
+      </div>
       <button
         onClick={handleRemove}
-        className="cursor-pointer bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 text-sm rounded mt-auto block 
+        className="cursor-pointer bg-red-600 hover:bg-red-700 text-white font-medium py-1 px-2 text-sm rounded mt-auto block 
         w-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Remove from favourites

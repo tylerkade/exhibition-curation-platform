@@ -118,7 +118,12 @@ export default function ArtworkPage({
     setLoading(true);
   };
 
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (loading)
+    return (
+      <p className="text-center" aria-live="polite">
+        Loading...
+      </p>
+    );
 
   return (
     <>
@@ -129,34 +134,48 @@ export default function ArtworkPage({
               href={`/collections/${
                 apiSource === "M" ? "MET" : apiSource === "A" ? "ARTIC" : ""
               }/page/1`}
+              onClick={handleClick}
+              className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+              aria-label="Return to collection"
             >
-              <button
-                onClick={handleClick}
-                className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Return to collection
-              </button>
+              Return to collection
             </Link>
             <div className="relative inline-block">
               <button
                 onClick={() => handleToggleFavourite()}
-                className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+                aria-expanded={showDropdown}
+                aria-controls="exhibit-dropdown"
+                aria-label={
+                  isFavourited ? "Remove from favourites" : "Add to favourites"
+                }
               >
                 {isFavourited ? (
-                  <StarSolid height={24} />
+                  <StarSolid height={24} aria-hidden="true" />
                 ) : (
-                  <StarOutline height={24} />
+                  <StarOutline height={24} aria-hidden="true" />
                 )}
               </button>
 
               {!isFavourited && showDropdown && exhibits && (
-                <div className="absolute right-0 top-full mt-2 z-10 bg-blue-500 rounded shadow-lg w-48">
+                <div
+                  className="absolute right-0 top-full mt-2 z-10 bg-blue-600 rounded shadow-lg w-48"
+                  role="menu"
+                  aria-label="Select exhibit"
+                  id="exhibit-dropdown"
+                >
                   {exhibits.map((exhibit) => (
                     <button
                       key={exhibit.exhibit_id}
                       onClick={() => handleToggleFavourite(exhibit.exhibit_id)}
                       className="cursor-pointer block w-full text-left px-4 py-2 hover:bg-blue-700 text-sm"
                       disabled={addingToExhibit === exhibit.exhibit_id}
+                      role="menuitem"
+                      aria-label={`Select the ${exhibit.name} exhibit`}
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Escape") setShowDropdown(false);
+                      }}
                     >
                       {addingToExhibit === exhibit.exhibit_id
                         ? "Adding..."
@@ -167,6 +186,7 @@ export default function ArtworkPage({
               )}
             </div>
           </div>
+          
           {!artwork ? notFound() : <ItemCard object={artwork} />}
         </div>
       ) : (

@@ -89,10 +89,10 @@ export default function CollectionArtworks({
       >
         {view === "list" && artworks.length !== 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4">
-            <h3>Title</h3>
-            <h3>Author</h3>
-            <h3 className="hidden md:block">Department</h3>
-            <h3 className="hidden md:block">Culture</h3>
+            <h2>Title</h2>
+            <h2>Author</h2>
+            <h2 className="hidden md:block">Department</h2>
+            <h2 className="hidden md:block">Culture</h2>
           </div>
         ) : (
           <></>

@@ -4,18 +4,34 @@ import React from "react";
 import { CollectionsButton } from "./ui/CollectionsButton";
 
 const partneredAPIs = [
-  { logo: "/MET.svg", link: "https://metmuseum.github.io/" },
-  { logo: "/ARTIC.svg", link: "https://api.artic.edu/docs/" },
+  {
+    partner: "The Metropolitan Museum of Art",
+    logo: "/MET.svg",
+    link: "https://metmuseum.github.io/",
+  },
+  {
+    partner: "The Art Institute of Chicago",
+    logo: "/ARTIC.svg",
+    link: "https://api.artic.edu/docs/",
+  },
 ];
 
 const dummyData = [
-  { title: "Gothic Interiors", amount: 5, image: "/gothicInteriors.jpg" },
+  {
+    title: "Gothic Interiors",
+    amount: 5,
+    image: "/gothicInteriors.jpg",
+  },
   {
     title: "Self Portraits",
     amount: 10,
     image: "/selfPortrait.jpg",
   },
-  { title: "Natural Beauty", amount: 7, image: "/naturalBeauty.jpg" },
+  {
+    title: "Natural Beauty",
+    amount: 7,
+    image: "/naturalBeauty.jpg",
+  },
 ];
 
 export default async function Page() {
@@ -25,7 +41,8 @@ export default async function Page() {
         <div className="absolute inset-0">
           <Image
             src="/heroBanner.jpg"
-            alt="Art collage banner"
+            alt=""
+            role="presentation"
             style={{ objectFit: "cover" }}
             fill
             className="opacity-30"
@@ -36,16 +53,21 @@ export default async function Page() {
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white">
             Discover. Curate. Exhibit.
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-6">
+          <p className="text-lg md:text-xl text-gray-100 mb-6">
             Browse iconic artworks from global collections and create your own
             curated exhibitions.
           </p>
           <div className="flex justify-center space-x-4">
-            <CollectionsButton btnMsg={"Start Exploring"} nav={"/collections"}/>
-            <Link href={`/login`}>
-              <button className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Create Your Exhibition
-              </button>
+            <CollectionsButton
+              btnMsg={"Start Exploring"}
+              nav={"/collections"}
+            />
+            <Link
+              href={`/login`}
+              className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              aria-label="Log in and head to your dashboard to create your own exhibition"
+            >
+              Create Your Exhibition
             </Link>
           </div>
         </div>
@@ -64,8 +86,8 @@ export default async function Page() {
           {dummyData.map((exhibit, index) => (
             <div key={index} className="rounded-2xl overflow-hidden">
               <Image
-                src={exhibit.image}
-                alt={exhibit.title}
+                src={exhibit.image || "/placeholder.png"}
+                alt={`Art exhibit titled "${exhibit.title}" with ${exhibit.amount} artworks`}
                 width={400}
                 height={250}
                 className="w-full object-cover"
@@ -83,7 +105,7 @@ export default async function Page() {
 
       <section className="bg-gray-600 px-6 py-16">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-4">
+          <h2 className="text-3xl font-semibold mb-4 text-white">
             Powered by Open Commons
           </h2>
           <p className="text-gray-300 mb-8">
@@ -95,8 +117,8 @@ export default async function Page() {
               <div key={index} className="flex justify-center">
                 <a href={api.link} target="_blank" rel="noopener noreferrer">
                   <Image
-                    src={api.logo}
-                    alt={`Partner ${index}`}
+                    src={api.logo || "/placeholder.png"}
+                    alt={`${api.partner} Logo`}
                     width={120}
                     height={120}
                     style={{ height: "auto" }}

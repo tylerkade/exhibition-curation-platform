@@ -96,7 +96,7 @@ const CollectionFilter = ({
     <div>
       <div className="flex justify-center">
         <button
-          className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center mb-1"
+          className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded flex items-center mb-1"
           onClick={() => setIsFilterOpen(!isFilterOpen)}
         >
           Filter
@@ -265,12 +265,12 @@ const CollectionFilter = ({
                 </label>
               </>
             )}
-            <p className="col-span-2 text-center italic text-gray-100 opacity-50">
+            <div className="col-span-2 text-center italic text-gray-100 opacity-50">
               Note: Some artwork data provided by the API may be incorrect
               {api === "ARTIC" && (
                 <p>The ARTIC api is limited to 100 pages when searching</p>
               )}
-            </p>
+            </div>
             <div className="col-span-2 grid grid-cols-2">
               <div className="justify-self-start">
                 <button
@@ -304,7 +304,7 @@ const CollectionFilter = ({
               <div className="justify-self-end">
                 <button
                   onClick={handleSubmit}
-                  className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                  className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded"
                 >
                   Search
                 </button>

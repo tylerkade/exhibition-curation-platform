@@ -9,12 +9,23 @@ const ItemCard = ({ object }: { object: APIObject }) => {
   const cleanTitle = sanitiseHTML(object.title);
   const cleanDescription = sanitiseHTML(object.ARTICDescription);
 
+  const headingId = `artwork-title-${object.objectID}`;
+  
   return (
-    <div>
+    <article
+      className="bg-gray-900 rounded-md shadow-md overflow-hidden pt-5"
+      aria-labelledby={headingId}
+    >
       <div className="justify-self-center bg-gray-200 p-2 rounded">
         <Image
           src={object.primaryImage || "/placeholder.png"}
-          alt={`image of ${object.objectName}`}
+          alt={
+            object.primaryImage
+              ? `${object.objectName} by ${
+                  object.artistDisplayName || "Unknown Artist"
+                }`
+              : "Placeholder image for missing artwork"
+          }
           width={object.ARTICWidth ?? setWidth}
           height={object.ARTICHeight ?? Math.round((setWidth * 3) / 4)}
           style={{
@@ -28,14 +39,11 @@ const ItemCard = ({ object }: { object: APIObject }) => {
       </div>
       <div>
         <div className="p-4 space-y-2">
-          <h2 className="text-xl font-semibold text-white line-clamp-2">
-            <p
-              className="text-m"
-              dangerouslySetInnerHTML={{
-                __html: cleanTitle,
-              }}
-            ></p>
-          </h2>
+          <h1
+            className="text-2xl font-semibold text-white line-clamp-2"
+            dangerouslySetInnerHTML={{ __html: cleanTitle }}
+            id={headingId}
+          />
           {object.artistDisplayName ? (
             <p className="text-gray-400 text-sm">
               {object.artistDisplayName}
@@ -94,13 +102,13 @@ const ItemCard = ({ object }: { object: APIObject }) => {
           </div>
         </div>
         <div className="px-4 py-3 flex justify-between items-center border-t border-gray-800">
-          <span className="text-xs text-gray-500">
+          <div className="text-xs text-gray-400">
             <p>Accession/Reference: {object.accessionNumber || "N/A"}</p>
             <p>{object.APIsource}</p>
-          </span>
+          </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

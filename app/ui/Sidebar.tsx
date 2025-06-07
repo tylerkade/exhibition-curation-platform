@@ -1,25 +1,70 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { UserSignOut } from "@/app/lib/serverActions";
 import { CrossIcon, ListIcon } from "@/components/svgs/SVGs";
-
-type UserDetails = {
-  name: string;
-  username: string;
-};
+import { UserDetails } from "../lib/definitions";
 
 const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { username } = userDetails ?? { name: "", username: "" };
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+
+    if (sidebar) {
+      if (!isOpen) {
+        if (sidebar.contains(document.activeElement)) {
+          (document.activeElement as HTMLElement)?.blur();
+        }
+
+        sidebar.setAttribute("inert", "");
+      } else {
+        sidebar.removeAttribute("inert");
+        const firstLink = sidebar.querySelector("a");
+        (firstLink as HTMLElement)?.focus();
+      }
+    }
+
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [isOpen]);
 
   return (
-    <div className="flex">
+    <nav className="flex" id="sidebar" aria-label="Main navigation">
+      <main className={`flex-1 pl-4 bg-gray-800 ${isOpen ? "ml-64" : "ml-0"}`}>
+        <div
+          className={`${
+            isOpen ? "fixed top-4 left-65 z-100" : "fixed top-4 left-4 z-110"
+          }`}
+        >
+          <button
+            className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+          >
+            {isOpen ? <CrossIcon /> : <ListIcon />}
+          </button>
+        </div>
+      </main>
       <div
-        className={`bg-gray-800 text-white fixed h-screen transition-all duration-300 z-100 ${
-          isOpen ? "w-64" : "w-0 overflow-hidden"
+        className={`bg-gray-800 text-white fixed h-screen transition-all duration-300 z-100 ease-in-out ${
+          isOpen ? "w-64 opacity-100" : "w-0 overflow-hidden opacity-0"
         }`}
+        role={isOpen ? "dialog" : undefined}
+        aria-modal={isOpen ? "true" : undefined}
+        aria-labelledby="sidebar-title"
+        aria-hidden={!isOpen}
+        ref={sidebarRef}
       >
+        <h2 id="sidebar-title" className="sr-only">
+          Sidebar menu
+        </h2>
         <div className="flex flex-col items-center justify-between h-full py-4">
           <div className="flex flex-col items-center gap-4">
             <div className="mt-4">
@@ -88,23 +133,7 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
           </div>
         </div>
       </div>
-      <div
-        className={`flex-1 pt-4 pl-4 bg-gray-800 ${isOpen ? "ml-64" : "ml-0"}`}
-      >
-        <div
-          className={`${
-            isOpen ? "fixed top-4 left-65 z-100" : "fixed top-4 left-4 z-100"
-          }`}
-        >
-          <button
-            className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <CrossIcon /> : <ListIcon />}
-          </button>
-        </div>
-      </div>
-    </div>
+    </nav>
   );
 };
 
