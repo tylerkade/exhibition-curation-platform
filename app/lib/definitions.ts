@@ -331,3 +331,9 @@ export type SmallItemCardProps = {
   art: APIObject;
   view?: "grid" | "list";
 };
+
+export type Exhibit = {
+  exhibit_id: number;
+  name: string;
+  artworks: string[];
+}

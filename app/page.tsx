@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { CollectionsButton } from "./ui/CollectionsButton";
+import { placeHolderBlurData } from "./utils/placeHolderBlurData";
 
 const partneredAPIs = [
   {
@@ -47,6 +48,8 @@ export default async function Page() {
             fill
             className="opacity-30"
             priority
+            placeholder="blur"
+            blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
           />
         </div>
         <div className="relative z-10 max-w-3xl">
@@ -91,6 +94,8 @@ export default async function Page() {
                 width={400}
                 height={250}
                 className="w-full object-cover"
+                placeholder="blur"
+                blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
               />
               <div className="p-4 text-left">
                 <h3 className="text-xl font-semibold">{exhibit.title}</h3>
@@ -123,6 +128,8 @@ export default async function Page() {
                     height={120}
                     style={{ height: "auto" }}
                     className="mx-auto grayscale hover:grayscale-0 transition"
+                    placeholder="blur"
+                    blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
                   />
                 </a>
               </div>

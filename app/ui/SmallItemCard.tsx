@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SmallItemCardProps } from "../lib/definitions";
+import { placeHolderBlurData } from "../utils/placeHolderBlurData";
 
 export default function SmallItemCard({ art, view }: SmallItemCardProps) {
   const href = `/collections/${art.APIsource}/${art.APIsource[0]}${art.objectID}`;
@@ -66,6 +67,8 @@ export default function SmallItemCard({ art, view }: SmallItemCardProps) {
             className="object-contain rounded"
             sizes="(max-width: 768px) 100vw, 200px"
             priority
+            placeholder="blur"
+            blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
           />
         </div>
       ) : (

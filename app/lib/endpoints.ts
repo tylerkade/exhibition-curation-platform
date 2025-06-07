@@ -104,6 +104,32 @@ export async function removeArtworkFromExhibit(
   }
 }
 
+export async function createExhibit(user_id: number, exhibit_name: string) {
+  try {
+    const data = await sql`
+      INSERT INTO exhibits (user_id, name)
+      VALUES (${user_id}, ${exhibit_name})
+      RETURNING id, name;
+    `;
+    return data.rows[0];
+  } catch (error) {
+    console.error("error creating exhibit", error);
+    throw new Error("error creating exhibit");
+  }
+}
+
+export async function deleteExhibit(exhibit_id: number) {
+  try {
+    await sql`
+      DELETE FROM exhibits
+      WHERE id = ${exhibit_id};
+    `;
+  } catch (error) {
+    console.error("error deleting exhibit", error);
+    throw new Error("error deleting exhibit");
+  }
+}
+
 // API calls
 
 export async function fetchCollectionMainPage(amount: number) {

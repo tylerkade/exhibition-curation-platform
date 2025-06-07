@@ -53,7 +53,7 @@ async function seedExhibits() {
 async function seedExhibitArtworks() {
   await client.sql`
       CREATE TABLE IF NOT EXISTS exhibit_artworks (
-        exhibit_id INT REFERENCES exhibits(id) NOT NULL,
+        exhibit_id INT REFERENCES exhibits(id) ON DELETE CASCADE NOT NULL,
         artwork_id VARCHAR(255)
       );
     `;

@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { APIObject } from "../lib/definitions";
 import { sanitiseHTML } from "../utils/sanitiseHTML";
+import { placeHolderBlurData } from "../utils/placeHolderBlurData";
 
 const ItemCard = ({ object }: { object: APIObject }) => {
   const setWidth = 512;
@@ -10,7 +11,7 @@ const ItemCard = ({ object }: { object: APIObject }) => {
   const cleanDescription = sanitiseHTML(object.ARTICDescription);
 
   const headingId = `artwork-title-${object.objectID}`;
-  
+
   return (
     <article
       className="bg-gray-900 rounded-md shadow-md overflow-hidden pt-5"
@@ -35,6 +36,8 @@ const ItemCard = ({ object }: { object: APIObject }) => {
           }}
           className="h-auto rounded"
           priority
+          placeholder="blur"
+          blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
         />
       </div>
       <div>

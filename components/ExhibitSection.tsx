@@ -3,18 +3,24 @@ import React, { useCallback, useRef, useState } from "react";
 import ArtworkPage from "@/components/ArtworkPage";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { CrossIcon } from "./svgs/SVGs";
 
 export default function ExhibitSection({
   name,
   artworks,
   exhibit_id,
+  handleDeleteExhibit,
+  canDelete,
 }: {
   name: string;
   artworks: string[];
   exhibit_id: number;
+  handleDeleteExhibit: (id: number) => void;
+  canDelete: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [savedArtworks, setSavedArtworks] = useState<string[]>(artworks);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const visibleArtworks = expanded ? savedArtworks : savedArtworks.slice(0, 5);
   const isMore = savedArtworks.length > 5;
@@ -33,15 +39,38 @@ export default function ExhibitSection({
 
   return (
     <div className="space-y-2 rounded-md p-2 bg-gray-700">
-      <h2 className="text-lg font-semibold">
-        {name[0].toUpperCase() + name.slice(1)}
-      </h2>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-lg font-semibold">
+          {name[0].toUpperCase() + name.slice(1)}
+        </h2>
+        {canDelete && (
+          <button
+            className={`cursor-pointer transition-colors ${
+              isDeleting
+                ? "text-gray-500 cursor-not-allowed"
+                : "text-red-400 hover:text-red-600"
+            }`}
+            onClick={async () => {
+              setIsDeleting(true);
+              try {
+                handleDeleteExhibit(exhibit_id);
+              } finally {
+                setIsDeleting(false);
+              }
+            }}
+            disabled={isDeleting}
+            aria-label={`Delete ${name} exhibit`}
+          >
+            <CrossIcon />
+          </button>
+        )}
+      </div>
       {(!visibleArtworks || visibleArtworks.length === 0) && (
         <div
-          className="h-32 flex items-center justify-center text-xl text-blue-600 underline"
+          className="h-32 flex items-center justify-center text-xl text-blue-400 underline"
           aria-label="Browse collections"
         >
-          <Link href={`/collections`} className="hover:text-blue-500">
+          <Link href={`/collections`} className="hover:text-blue-600">
             Browse collections
           </Link>
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { auth } from "@/auth";
 import { fetchUserByUsername, fetchUserExhibits } from "../lib/endpoints";
-import ExhibitSection from "@/components/ExhibitSection";
+import ExhibitDashboard from "@/components/ExhibitDashboard";
 
 export default async function Page() {
   const session = await auth();
@@ -13,21 +13,5 @@ export default async function Page() {
   const userData = await fetchUserByUsername(session.user.username);
   const exhibits = await fetchUserExhibits(userData.username);
 
-  return (
-    <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen bg-gray-900">
-      <h1 className="pl-2 text-xl font-black">Hello {userData.name}</h1>
-      <h2 className="pl-2 text-lg font-bold border-b border-gray-700">
-        Your Exhibits
-      </h2>
-
-      {exhibits.map((exhibit) => (
-        <ExhibitSection
-          key={exhibit.name}
-          name={exhibit.name}
-          artworks={exhibit.artworks}
-          exhibit_id={exhibit.exhibit_id}
-        />
-      ))}
-    </div>
-  );
+  return <ExhibitDashboard userData={userData} exhibits={exhibits} />;
 }
