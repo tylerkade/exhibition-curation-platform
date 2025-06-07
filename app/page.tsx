@@ -48,8 +48,6 @@ export default async function Page() {
             fill
             className="opacity-30"
             priority
-            placeholder="blur"
-            blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
           />
         </div>
         <div className="relative z-10 max-w-3xl">

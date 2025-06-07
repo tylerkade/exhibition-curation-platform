@@ -20,13 +20,7 @@ const ItemCard = ({ object }: { object: APIObject }) => {
       <div className="justify-self-center bg-gray-200 p-2 rounded">
         <Image
           src={object.primaryImage || "/placeholder.png"}
-          alt={
-            object.primaryImage
-              ? `${object.objectName} by ${
-                  object.artistDisplayName || "Unknown Artist"
-                }`
-              : "Placeholder image for missing artwork"
-          }
+          alt={`${object.objectName} by ${object.artistDisplayName || "Unknown Artist"}`}
           width={object.ARTICWidth ?? setWidth}
           height={object.ARTICHeight ?? Math.round((setWidth * 3) / 4)}
           style={{

@@ -56,13 +56,7 @@ export default function SmallItemCard({ art, view }: SmallItemCardProps) {
         <div className="relative w-full h-[200px] mb-2">
           <Image
             src={art.primaryImageSmall || art.primaryImage}
-            alt={
-              art.title
-                ? `Artwork titled ${art.title} by ${
-                    art.artistDisplayName || "Unknown"
-                  }`
-                : "No image available for this artwork"
-            }
+            alt={`"${art.title}" by ${art.artistDisplayName || "an unknown artist"}`}
             fill
             className="object-contain rounded"
             sizes="(max-width: 768px) 100vw, 200px"
