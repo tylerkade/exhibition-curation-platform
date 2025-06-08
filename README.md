@@ -11,7 +11,9 @@ users gain access to features like favouriting artworks and creating personalise
 
 ## 🚀 Live Demo
 
-You can view the deployed version [here](https://exhibition-curation-platform-ten.vercel.app/)
+You can view the deployed version [here](https://exhibition-curation-platform-ten.vercel.app/).
+
+[Video](https://youtu.be/XmwdTQRAkcc) demonstration of key features.
 
 ## 📋 Features
 
