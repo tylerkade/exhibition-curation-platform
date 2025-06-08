@@ -116,7 +116,7 @@ const CollectionFilter = ({
             <label className="col-span-2">
               <fieldset className="mb-1">
                 <legend className="sr-only">Search</legend>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-4">
                   <span>Search</span>
                   {api === "MET" && (
                     <>

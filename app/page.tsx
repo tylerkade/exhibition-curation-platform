@@ -58,7 +58,7 @@ export default async function Page() {
             Browse iconic artworks from global collections and create your own
             curated exhibitions.
           </p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <CollectionsButton
               btnMsg={"Start Exploring"}
               nav={"/collections"}

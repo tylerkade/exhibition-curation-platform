@@ -129,21 +129,26 @@ export default function ArtworkPage({
     <>
       {!dashboard ? (
         <div className="p-4 space-y-6 max-w-6xl mx-auto min-h-screen">
-          <div className="flex justify-between items-center">
+          <div
+            className="flex flex-col sm:flex-row sm:justify-between sm:items-center 
+          gap-3 bg-gray-800 p-3 rounded"
+          >
             <Link
               href={`/collections/${
                 apiSource === "M" ? "MET" : apiSource === "A" ? "ARTIC" : ""
               }/page/1`}
               onClick={handleClick}
-              className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+              className="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-800 
+              text-white font-bold py-2 px-4 rounded"
               aria-label="Return to collection"
             >
               Return to collection
             </Link>
-            <div className="relative inline-block">
+            <div className="relative inline-block w-full sm:w-auto text-center">
               <button
                 onClick={() => handleToggleFavourite()}
-                className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+                className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white 
+                font-bold py-2 px-4 rounded"
                 aria-expanded={showDropdown}
                 aria-controls="exhibit-dropdown"
                 aria-label={
@@ -159,7 +164,8 @@ export default function ArtworkPage({
 
               {!isFavourited && showDropdown && exhibits && (
                 <div
-                  className="absolute right-0 top-full mt-2 z-10 bg-blue-600 rounded shadow-lg w-48"
+                  className=" absolute top-full mt-2 z-10 bg-blue-600 rounded shadow-lg w-48 left-1/2 
+                  -translate-x-1/2 sm:right-0 sm:left-auto sm:translate-x-0"
                   role="menu"
                   aria-label="Select exhibit"
                   id="exhibit-dropdown"
@@ -186,7 +192,6 @@ export default function ArtworkPage({
               )}
             </div>
           </div>
-          
           {!artwork ? notFound() : <ItemCard object={artwork} />}
         </div>
       ) : (

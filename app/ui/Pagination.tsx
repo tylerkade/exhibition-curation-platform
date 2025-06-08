@@ -72,10 +72,10 @@ export function Pagination({
   else
     return (
       <nav
-        className="flex flex-col items-center gap-4 py-6"
+        className="flex flex-col items-center gap-4 py-6 px-4"
         aria-label="Pagination navigation"
       >
-        <ul className="inline-flex -space-x-px text-sm">
+        <ul className="flex flex-wrap justify-center gap-1 text-sm">
           {prevPage >= 1 && (
             <li>
               <Link
@@ -134,30 +134,35 @@ export function Pagination({
           )}
         </ul>
         {totalPages > 1 ? (
-          <form onSubmit={handleSubmit} className="flex items-center gap-2">
-            <label htmlFor="page" className="sr-only">
-              Page number
-            </label>
-            <input
-              id="page"
-              type="number"
-              name="page"
-              min="1"
-              max={totalPages}
-              placeholder="Page number"
-              value={inputPage}
-              onChange={(e) => setInputPage(e.target.value)}
-              className={`w-30 px-2 py-1 text-sm border rounded-md dark:bg-gray-800 
-                dark:text-white dark:border-gray-600`}
-            />
-            <button
-              type="submit"
-              className={`cursor-pointer text-sm px-3 py-1.5 bg-blue-600 text-white 
-                rounded-md hover:bg-blue-700`}
+          <div>
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row items-center gap-2 w-full max-w-xs"
             >
-              Go
-            </button>
-          </form>
+              <label htmlFor="page" className="sr-only">
+                Page number
+              </label>
+              <input
+                id="page"
+                type="number"
+                name="page"
+                min="1"
+                max={totalPages}
+                placeholder="Page number"
+                value={inputPage}
+                onChange={(e) => setInputPage(e.target.value)}
+                className={`w-30 px-2 py-1 text-sm border rounded-md dark:bg-gray-800 
+                dark:text-white dark:border-gray-600`}
+              />
+              <button
+                type="submit"
+                className="cursor-pointer text-sm px-3 py-1.5 bg-blue-600 text-white 
+            rounded-md hover:bg-blue-700 w-full sm:w-auto"
+              >
+                Go
+              </button>
+            </form>
+          </div>
         ) : (
           <></>
         )}

@@ -20,7 +20,9 @@ const ItemCard = ({ object }: { object: APIObject }) => {
       <div className="justify-self-center bg-gray-200 p-2 rounded">
         <Image
           src={object.primaryImage || "/placeholder.png"}
-          alt={`${object.objectName} by ${object.artistDisplayName || "Unknown Artist"}`}
+          alt={`${object.objectName} by ${
+            object.artistDisplayName || "Unknown Artist"
+          }`}
           width={object.ARTICWidth ?? setWidth}
           height={object.ARTICHeight ?? Math.round((setWidth * 3) / 4)}
           style={{
@@ -75,8 +77,8 @@ const ItemCard = ({ object }: { object: APIObject }) => {
               }}
             ></div>
           )}
-          <div className="flex justify-between items-start gap-4">
-            <div className="flex flex-wrap gap-2 text-xs text-gray-300 mt-2 max-w-[70%]">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mt-2">
+            <div className="flex flex-wrap gap-2 text-xs text-gray-300 sm:max-w-[70%]">
               {object.tags && object.tags.length > 0 ? (
                 object.tags.slice(0, 3).map((tag, index) => (
                   <span

@@ -51,8 +51,8 @@ export default function CollectionArtworks({
 
   return (
     <div className="p-4 max-w-6xl mx-auto space-y-6 min-h-screen">
-      <div className="flex justify-between gap-3">
-        <h1 className="text-xl font-semibold">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 bg-gray-800 p-2 rounded">
+        <h1 className="text-xl font-semibold text-white text-center sm:text-left">
           {api === "MET"
             ? "The Metropolitan Museum of Art"
             : api === "ARTIC"
@@ -60,7 +60,12 @@ export default function CollectionArtworks({
             : api}{" "}
           Collection
         </h1>
-        <CollectionsButton btnMsg="Return to collections" nav="/collections" />
+        <div className="flex justify-center sm:justify-end">
+          <CollectionsButton
+            btnMsg="Return to collections"
+            nav="/collections"
+          />
+        </div>
       </div>
       <div className="justify-end flex gap-3">
         <ViewToggle view={view} setView={setView} />
