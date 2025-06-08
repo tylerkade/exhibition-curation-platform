@@ -10,6 +10,7 @@ import {
   Filters,
   User,
 } from "./definitions";
+import profanityFilter from "../utils/profanityFilter";
 
 // Database
 
@@ -105,6 +106,10 @@ export async function removeArtworkFromExhibit(
 }
 
 export async function createExhibit(user_id: number, exhibit_name: string) {
+  if (profanityFilter.isProfane(exhibit_name)) {
+    throw new Error("Inappropriate exhibit name detected.");
+  }
+
   try {
     const data = await sql`
       INSERT INTO exhibits (user_id, name)

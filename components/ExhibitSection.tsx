@@ -37,6 +37,15 @@ export default function ExhibitSection({
     }, 0);
   }, []);
 
+  const handleDeleteClick = async (exhibit_id: number) => {
+    setIsDeleting(true);
+    try {
+      handleDeleteExhibit(exhibit_id);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="space-y-2 rounded-md p-2 bg-gray-700">
       <div className="flex items-center justify-between mb-2">
@@ -50,14 +59,7 @@ export default function ExhibitSection({
                 ? "text-gray-500 cursor-not-allowed"
                 : "text-red-400 hover:text-red-600"
             }`}
-            onClick={async () => {
-              setIsDeleting(true);
-              try {
-                handleDeleteExhibit(exhibit_id);
-              } finally {
-                setIsDeleting(false);
-              }
-            }}
+            onClick={() => handleDeleteClick(exhibit_id)}
             disabled={isDeleting}
             aria-label={`Delete ${name} exhibit`}
           >

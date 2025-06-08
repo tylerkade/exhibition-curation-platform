@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ExhibitSection from "@/components/ExhibitSection";
 import { Exhibit } from "@/app/lib/definitions";
 import { createExhibit, deleteExhibit } from "@/app/lib/endpoints";
+import profanityFilter from "@/app/utils/profanityFilter";
 
 export default function ExhibitDashboard({
   userData,
@@ -17,6 +18,11 @@ export default function ExhibitDashboard({
 
   const handleCreateExhibit = async () => {
     if (!newExhibitName.trim()) return;
+
+    if (profanityFilter.isProfane(newExhibitName)) {
+      alert("Please avoid using inappropriate language in exhibit names.");
+      return;
+    }
 
     try {
       const created = await createExhibit(
