@@ -277,7 +277,8 @@ export type ArtworkPageProps = {
   dashboard?: boolean;
   exhibit_id?: number;
   onRemove?: (objectID: number) => void;
-  exhibits?: { exhibit_id: number; name: string; artworks: string[] }[] | null;
+  exhibits?: { exhibit_id: number; name: string; artworks: { id: string; date_added: Date }[] }[] | null;
+
 };
 
 export type ViewToggleProps = {
@@ -289,12 +290,7 @@ export type User = {
   user_id: number;
   username: string;
   name: string;
-  exhibits: UserExhibit[];
-};
-
-export type UserExhibit = {
-  name: string;
-  artworks: string[];
+  exhibits: Exhibit[];
 };
 
 export type Filters = {

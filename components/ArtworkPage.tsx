@@ -52,9 +52,10 @@ export default function ArtworkPage({
 
         if (exhibits) {
           const fullArtworkId = apiSource + object.objectID;
-          const isInAnyExhibit = exhibits.some((exhibit) => {
-            return exhibit.artworks.includes(fullArtworkId);
-          });
+          const isInAnyExhibit = exhibits.some((exhibit) =>
+            exhibit.artworks.some((a) => a.id === fullArtworkId)
+          );
+
           setIsFavourited(isInAnyExhibit);
         }
       } catch (error) {
@@ -81,7 +82,9 @@ export default function ArtworkPage({
     if (isFavourited) {
       const targetExhibitId =
         exhibit_id ||
-        exhibits?.find((ex) => ex.artworks.includes(fullArtworkId))?.exhibit_id;
+        exhibits?.find((exhibit) =>
+          exhibit.artworks.some((artwork) => artwork.id === fullArtworkId)
+        )?.exhibit_id;
 
       if (!targetExhibitId) {
         console.warn("Error: This artwork isn't in any of your exhibits.");
