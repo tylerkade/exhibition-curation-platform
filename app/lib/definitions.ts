@@ -335,5 +335,14 @@ export type SmallItemCardProps = {
 export type Exhibit = {
   exhibit_id: number;
   name: string;
-  artworks: string[];
-}
+  artworks: { id: string; date_added: Date }[];
+};
+
+export type CollectionArtworksProps = {
+  artworks: APIObject[];
+  pageNumber: number;
+  totalPages: number;
+  api: string;
+  fetchedDepartments: Department[];
+  totalResults: number;
+};

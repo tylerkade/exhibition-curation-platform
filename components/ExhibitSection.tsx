@@ -13,14 +13,21 @@ export default function ExhibitSection({
   canDelete,
 }: {
   name: string;
-  artworks: string[];
+  artworks: { id: string; date_added: Date }[];
   exhibit_id: number;
   handleDeleteExhibit: (id: number) => void;
   canDelete: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [savedArtworks, setSavedArtworks] = useState<string[]>(artworks);
+  const [savedArtworks, setSavedArtworks] = useState(artworks);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [flipOrder, setFlipOrder] = useState(false);
+
+  savedArtworks.sort((a, b) => {
+    const timeA = new Date(a.date_added).getTime();
+    const timeB = new Date(b.date_added).getTime();
+    return flipOrder ? timeA - timeB : timeB - timeA;
+  });
 
   const visibleArtworks = expanded ? savedArtworks : savedArtworks.slice(0, 5);
   const isMore = savedArtworks.length > 5;
@@ -28,7 +35,7 @@ export default function ExhibitSection({
   const artworkRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleRemove = useCallback((id: string, index: number) => {
-    setSavedArtworks((prev) => prev.filter((a) => a.slice(1) !== id));
+    setSavedArtworks((prev) => prev.filter((a) => a.id.slice(1) !== id));
 
     setTimeout(() => {
       const nextRef =
@@ -39,33 +46,48 @@ export default function ExhibitSection({
 
   const handleDeleteClick = async (exhibit_id: number) => {
     setIsDeleting(true);
-    try {
-      handleDeleteExhibit(exhibit_id);
-    } finally {
-      setIsDeleting(false);
-    }
+    setTimeout(() => {
+      try {
+        handleDeleteExhibit(exhibit_id);
+      } finally {
+        setIsDeleting(false);
+      }
+    }, 500);
   };
 
   return (
     <div className="space-y-2 rounded-md p-2 bg-gray-700">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">
-          {name[0].toUpperCase() + name.slice(1)}
+          {isDeleting
+            ? "Deleting..."
+            : `${name[0].toUpperCase() + name.slice(1)}`}
         </h2>
-        {canDelete && (
+        <div className="flex items-center gap-4">
           <button
-            className={`cursor-pointer transition-colors ${
-              isDeleting
-                ? "text-gray-500 cursor-not-allowed"
-                : "text-red-400 hover:text-red-600"
+            onClick={() => setFlipOrder((prev) => !prev)}
+            className="cursor-pointer text-white underline-offset-2 underline"
+            aria-label={`Sort ${name} exhibit by ${
+              flipOrder ? "Oldest" : "Newest"
             }`}
-            onClick={() => handleDeleteClick(exhibit_id)}
-            disabled={isDeleting}
-            aria-label={`Delete ${name} exhibit`}
           >
-            <CrossIcon />
+            Sort by {flipOrder ? "Oldest" : "Newest"}
           </button>
-        )}
+          {canDelete && (
+            <button
+              className={`cursor-pointer transition-colors ${
+                isDeleting
+                  ? "text-gray-500 cursor-not-allowed"
+                  : "text-red-400 hover:text-red-600"
+              }`}
+              onClick={() => handleDeleteClick(exhibit_id)}
+              disabled={isDeleting}
+              aria-label={`Delete ${name} exhibit`}
+            >
+              <CrossIcon />
+            </button>
+          )}
+        </div>
       </div>
       {(!visibleArtworks || visibleArtworks.length === 0) && (
         <div
@@ -78,12 +100,12 @@ export default function ExhibitSection({
         </div>
       )}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-1">
-        {visibleArtworks.map((artworkID, index) => {
-          const id = artworkID.slice(1);
-          const apiSource = artworkID.slice(0, 1);
+        {visibleArtworks.map((artwork, index) => {
+          const id = artwork.id.slice(1);
+          const apiSource = artwork.id.slice(0, 1);
           return (
             <div
-              key={artworkID}
+              key={artwork.id}
               ref={(el) => {
                 artworkRefs.current[index] = el;
               }}

@@ -185,7 +185,7 @@ export default function ArtworkPage({
                     >
                       {addingToExhibit === exhibit.exhibit_id
                         ? "Adding..."
-                        : exhibit.name}
+                        : exhibit.name[0].toUpperCase() + exhibit.name.slice(1)}
                     </button>
                   ))}
                 </div>

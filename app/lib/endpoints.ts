@@ -38,7 +38,7 @@ export async function fetchUserByUsername(username: string | undefined) {
 export async function fetchUserExhibits(username: string) {
   try {
     const data = await sql`
-      SELECT e.id AS exhibit_id, e.name AS exhibit_name, ea.artwork_id 
+      SELECT e.id AS exhibit_id, e.name AS exhibit_name, ea.artwork_id, ea.date_added
       FROM users u
       JOIN exhibits e ON u.user_id = e.user_id
       LEFT JOIN exhibit_artworks ea ON e.id = ea.exhibit_id
@@ -49,20 +49,20 @@ export async function fetchUserExhibits(username: string) {
     const exhibits: {
       exhibit_id: number;
       name: string;
-      artworks: string[];
+      artworks: { id: string; date_added: Date }[];
     }[] = [];
 
     for (const row of data.rows) {
-      const { exhibit_id, exhibit_name, artwork_id } = row;
+      const { exhibit_id, exhibit_name, artwork_id, date_added } = row;
 
-      let exhibit = exhibits.find((e) => e.name === exhibit_name);
+      let exhibit = exhibits.find((e) => e.exhibit_id === exhibit_id);
 
       if (!exhibit) {
         exhibit = { exhibit_id: exhibit_id, name: exhibit_name, artworks: [] };
         exhibits.push(exhibit);
       }
       if (artwork_id) {
-        exhibit.artworks.push(artwork_id);
+        exhibit.artworks.push({ id: artwork_id, date_added: date_added });
       }
     }
 
@@ -80,7 +80,7 @@ export async function addArtworkToExhibit(
   try {
     const data = await sql`
     INSERT INTO exhibit_artworks
-    VALUES (${exhibit_id}, ${artwork_id})
+    VALUES (${exhibit_id}, ${artwork_id}, CURRENT_TIMESTAMP)
     ON CONFLICT DO NOTHING;
     `;
     return data.rowCount;

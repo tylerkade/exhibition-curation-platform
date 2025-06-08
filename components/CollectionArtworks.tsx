@@ -3,21 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Pagination } from "@/app/ui/Pagination";
 import SmallItemCard from "@/app/ui/SmallItemCard";
-import { APIObject, Department, Filters } from "@/app/lib/definitions";
+import { CollectionArtworksProps, Filters } from "@/app/lib/definitions";
 import ViewToggle from "@/app/ui/ViewToggle";
 import CollectionFilter from "@/app/ui/CollectionFilter";
 // import PageLimit from "@/app/ui/PageLimit";
 import { sanitiseSearchField } from "@/app/utils/validateSearchFields";
 import { CollectionsButton } from "@/app/ui/CollectionsButton";
-
-interface CollectionArtworksProps {
-  artworks: APIObject[];
-  pageNumber: number;
-  totalPages: number;
-  api: string;
-  fetchedDepartments: Department[];
-  totalResults: number;
-}
 
 export default function CollectionArtworks({
   artworks,

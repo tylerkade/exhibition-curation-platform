@@ -54,15 +54,16 @@ async function seedExhibitArtworks() {
   await client.sql`
       CREATE TABLE IF NOT EXISTS exhibit_artworks (
         exhibit_id INT REFERENCES exhibits(id) ON DELETE CASCADE NOT NULL,
-        artwork_id VARCHAR(255)
+        artwork_id VARCHAR(255),
+        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `;
 
   const insertedExhibitArtworks = await Promise.all(
     exhibit_artworks.map(
       (exhibit_artwork) => client.sql`
-          INSERT INTO exhibit_artworks (exhibit_id, artwork_id)
-          VALUES (${exhibit_artwork.exhibit_id}, ${exhibit_artwork.artwork_id});
+          INSERT INTO exhibit_artworks (exhibit_id, artwork_id, date_added)
+          VALUES (${exhibit_artwork.exhibit_id}, ${exhibit_artwork.artwork_id}, ${exhibit_artwork.date_added});
         `
     )
   );
