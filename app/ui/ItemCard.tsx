@@ -17,24 +17,26 @@ const ItemCard = ({ object }: { object: APIObject }) => {
       className="bg-gray-900 rounded-md shadow-md overflow-hidden pt-5"
       aria-labelledby={headingId}
     >
-      <div className="justify-self-center bg-gray-200 p-2 rounded">
-        <Image
-          src={object.primaryImage || "/placeholder.png"}
-          alt={`${object.objectName} by ${
-            object.artistDisplayName || "Unknown Artist"
-          }`}
-          width={object.ARTICWidth ?? setWidth}
-          height={object.ARTICHeight ?? Math.round((setWidth * 3) / 4)}
-          style={{
-            height: "auto",
-            width: "100%",
-            maxWidth: `${object.ARTICWidth}px`,
-          }}
-          className="h-auto rounded"
-          priority
-          placeholder="blur"
-          blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
-        />
+      <div className="flex justify-center p-4">
+        <div className="bg-gray-100 p-2 rounded shadow-inner inline-block">
+          <Image
+            src={object.primaryImage || "/placeholder.png"}
+            alt={`${object.objectName} by ${
+              object.artistDisplayName || "Unknown Artist"
+            }`}
+            width={object.ARTICWidth ?? setWidth}
+            height={object.ARTICHeight ?? Math.round((setWidth * 3) / 4)}
+            style={{
+              height: "auto",
+              width: "100%",
+              maxWidth: `${object.ARTICWidth}px`,
+            }}
+            className="h-auto rounded"
+            priority
+            placeholder="blur"
+            blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
+          />
+        </div>
       </div>
       <div>
         <div className="p-4 space-y-2">
