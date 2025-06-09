@@ -58,9 +58,26 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="#" className="mr-4 hover:underline md:mr-6">
+              <a
+                href="https://next-portfolio-mocha-one.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mr-4 hover:underline md:mr-6"
+              >
                 Contact
-              </Link>
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/tylerkade/exhibition-curation-platform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mr-4 hover:underline md:mr-6"
+              >
+                Github
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
             </li>
           </ul>
         </nav>

@@ -127,10 +127,21 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
               </Link>
             </div>
           </div>
-          <div className="text-xs text-gray-400 mt-4">
-            <p className="line-clamp-1">© 2025 Easy Exhibitions.</p>
-            <p className="line-clamp-1">All Rights Reserved.</p>
-          </div>
+          <ul className="text-center">
+            <li>
+              <a
+                href="https://github.com/tylerkade/exhibition-curation-platform"
+                target="_blank"
+                className="mr-4 hover:underline md:mr-6"
+              >
+                Github
+              </a>
+            </li>
+            <li className="text-xs text-gray-400 mt-4">
+              <p className="line-clamp-1">© 2025 Easy Exhibitions.</p>
+              <p className="line-clamp-1">All Rights Reserved.</p>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
