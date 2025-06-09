@@ -131,7 +131,6 @@ const Sidebar = ({ userDetails }: { userDetails: UserDetails | undefined }) => {
             <li>
               <a
                 href="https://github.com/tylerkade/exhibition-curation-platform"
-                target="_blank"
                 className="mr-4 hover:underline md:mr-6"
               >
                 Github
