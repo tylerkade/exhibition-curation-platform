@@ -78,11 +78,12 @@ const page = () => {
         the platform, please reach out to us through our{" "}
         <a
           href="https://github.com/tylerkade/exhibition-curation-platform"
-          className="text-blue-500 underline"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mr-4 text-blue-400 underline md:mr-6"
         >
-          GitHub
+          Github.
         </a>
-        .
       </p>
     </div>
   );
