@@ -301,14 +301,6 @@ const CollectionFilter = ({
                   Clear Filters
                 </button>
               </div>
-              <div className="justify-self-end">
-                <button
-                  onClick={handleSubmit}
-                  className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded"
-                >
-                  Search
-                </button>
-              </div>
             </div>
           </div>
         </div>
