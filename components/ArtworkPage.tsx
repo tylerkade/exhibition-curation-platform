@@ -8,7 +8,7 @@ import {
 } from "@/app/lib/endpoints";
 import ItemCard from "@/app/ui/ItemCard";
 import { APIObject, ArtworkPageProps } from "@/app/lib/definitions";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import Link from "next/link";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
@@ -22,6 +22,7 @@ export default function ArtworkPage({
   onRemove,
   exhibits,
 }: ArtworkPageProps) {
+  const router = useRouter();
   const [artwork, setArtwork] = useState<APIObject | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -71,9 +72,7 @@ export default function ArtworkPage({
 
   const handleToggleFavourite = async (selectedExhibitId?: number) => {
     if (!exhibits) {
-      window.alert(
-        "You must be logged in to add this artwork to a custom exhibition."
-      );
+      router.push("/login");
       return;
     }
     if (!artwork) return;
@@ -151,7 +150,7 @@ export default function ArtworkPage({
               <button
                 onClick={() => handleToggleFavourite()}
                 className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white 
-                font-bold py-2 px-4 rounded"
+                font-bold py-2 px-4 rounded peer relative"
                 aria-expanded={showDropdown}
                 aria-controls="exhibit-dropdown"
                 aria-label={
@@ -164,6 +163,17 @@ export default function ArtworkPage({
                   <StarOutline height={24} aria-hidden="true" />
                 )}
               </button>
+
+              {(!exhibits || exhibits.length === 0) && (
+                <div
+                  className="absolute right-0 mt-2 w-max bg-gray-700 
+                  text-white text-xs rounded py-1 px-2 opacity-0 
+                  peer-hover:opacity-100 transition-opacity pointer-events-none"
+                  role="tooltip"
+                >
+                  Click to login before adding to favourites
+                </div>
+              )}
 
               {!isFavourited && showDropdown && exhibits && (
                 <div

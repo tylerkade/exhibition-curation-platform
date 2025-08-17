@@ -15,12 +15,14 @@ export default function ExhibitDashboard({
   const [showForm, setShowForm] = useState(false);
   const [newExhibitName, setNewExhibitName] = useState("");
   const [exhibits, setExhibits] = useState(initialExhibits);
+  const [error, setError] = useState<string | null>(null);
 
   const handleCreateExhibit = async () => {
+    setError(null);
     if (!newExhibitName.trim()) return;
 
     if (profanityFilter.isProfane(newExhibitName)) {
-      alert("Please avoid using inappropriate language in exhibit names.");
+      setError("Please avoid using inappropriate language in exhibit names.");
       return;
     }
 
@@ -62,7 +64,11 @@ export default function ExhibitDashboard({
           </h1>
           <button
             className="cursor-pointer bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded"
-            onClick={() => setShowForm((prev) => !prev)}
+            onClick={() => {
+              setShowForm((prev) => !prev);
+              setError(null);
+            }}
+            
           >
             {showForm ? "Cancel" : "Create Exhibit"}
           </button>
@@ -83,8 +89,12 @@ export default function ExhibitDashboard({
                 value={newExhibitName}
                 onChange={(e) => setNewExhibitName(e.target.value)}
                 placeholder="Enter exhibit name"
-                className="p-2 rounded w-full text-white border border-gray-60 
-                bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`p-2 rounded w-full text-white border ${
+                  error ? "border-red-500" : "border-gray-600"
+                } bg-gray-700 focus:outline-none focus:ring-2 ${
+                  error ? "focus:ring-red-500" : "focus:ring-blue-500"
+                }`}
+                aria-describedby={error ? "exhibit-error" : undefined}
               />
               <button
                 onClick={handleCreateExhibit}
@@ -93,6 +103,11 @@ export default function ExhibitDashboard({
                 Save
               </button>
             </div>
+            {error && (
+              <p id="exhibit-error" className="text-sm text-red-500">
+                {error}
+              </p>
+            )}
           </div>
         )}
       </div>
