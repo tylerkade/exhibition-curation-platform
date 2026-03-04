@@ -63,6 +63,7 @@ export default function SmallItemCard({ art, view }: SmallItemCardProps) {
             priority
             placeholder="blur"
             blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
+            unoptimized
           />
         </div>
       ) : (

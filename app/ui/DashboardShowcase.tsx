@@ -57,6 +57,7 @@ export default function DashboardShowcase({
                 sizes="(max-width: 768px) 100vw, 200px"
                 placeholder="blur"
                 blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
+                unoptimized
               />
             </div>
           ) : (

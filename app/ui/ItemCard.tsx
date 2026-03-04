@@ -35,6 +35,7 @@ const ItemCard = ({ object }: { object: APIObject }) => {
             priority
             placeholder="blur"
             blurDataURL={`data:image/png;base64,${placeHolderBlurData}`}
+            unoptimized
           />
         </div>
       </div>
